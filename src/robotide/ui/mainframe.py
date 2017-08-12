@@ -61,8 +61,8 @@ _menudata = """
 !About | Information about RIDE
 """
 
-
-class RideFrame(wx.Frame, RideEventHandler):
+class RideFrameMetaclass(type(wx.Frame), type(RideEventHandler)): pass
+class RideFrame(wx.Frame, RideEventHandler, metaclass=RideFrameMetaclass):
 
     def __init__(self, application, controller):
         wx.Frame.__init__(self, parent=None, title='RIDE',

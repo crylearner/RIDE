@@ -37,7 +37,8 @@ from .popupwindow import HtmlPopupWindow
 from .tags import TagsDisplay
 
 
-class SettingEditor(wx.Panel, utils.RideEventHandler):
+class SettingEditorMetaclass(type(wx.Panel), type(utils.RideEventHandler)): pass
+class SettingEditor(wx.Panel, utils.RideEventHandler, metaclass=SettingEditorMetaclass):
 
     def __init__(self, parent, controller, plugin, tree):
         wx.Panel.__init__(self, parent)

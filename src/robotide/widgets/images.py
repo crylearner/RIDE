@@ -70,10 +70,10 @@ class ImageProvider(object):
         return os.path.join(self._BASE, name)
 
     def _img_from_art_provider(self, source):
-        return wx.ArtProvider_GetBitmap(source, wx.ART_OTHER, self._size)
+        return wx.ArtProvider.GetBitmap(source, wx.ART_OTHER, self._size)
 
     def _load_prog_icons(self):
         icons = wx.IconBundle()
-        icons.AddIconFromFile(self._get_img_path('robot.ico'),
+        icons.AddIcon(self._get_img_path('robot.ico'),
                              wx.BITMAP_TYPE_ANY)
         return icons

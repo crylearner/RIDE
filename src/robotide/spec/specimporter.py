@@ -51,7 +51,7 @@ class SpecImporterPlugin(Plugin):
                             message='Import Library Spec XML',
                             wildcard=wildcard,
                             defaultDir=self.model.default_dir,
-                            style=wx.OPEN)
+                            style=wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
         else:

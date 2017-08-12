@@ -38,10 +38,11 @@ http://sourceforge.net/projects/wxpython/files/wxPython/""")
 supported_versions = ["2.8", "3.0"]
 
 try:
-    import wxversion
-    from wxversion import VersionError
-    wxversion.select(supported_versions)
+#     import wx.py.version
+#     from wxversion import VersionError
+#     wxversion.select(supported_versions)
     import wx
+    #print(wx.py.version.VERSION)
 except ImportError as e:
     if "no appropriate 64-bit architecture" in "{0}".format(e).lower() and \
        sys.platform == 'darwin':
@@ -49,9 +50,7 @@ except ImportError as e:
     else:
         print((errorMessageTemplate.substitute(reason="wxPython not found.")))
     sys.exit(1)
-except VersionError:
-    print((errorMessageTemplate.substitute(reason="Wrong wxPython version.")))
-    sys.exit(1)
+
 
 if "ansi" in wx.PlatformInfo:
     print((errorMessageTemplate.substitute(reason="wxPython with ansi encoding \

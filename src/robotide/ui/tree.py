@@ -55,8 +55,11 @@ if IS_WINDOWS:
     _TREE_ARGS['style'] |= wx.TR_EDIT_LABELS
 
 
+print(type(treemixin.DragAndDrop), type(customtreectrl.CustomTreeCtrl), type(utils.RideEventHandler))
+class TreeMetaclass(type(utils.RideEventHandler), type(customtreectrl.CustomTreeCtrl), type(treemixin.DragAndDrop)
+           ): pass
 class Tree(treemixin.DragAndDrop, customtreectrl.CustomTreeCtrl,
-           utils.RideEventHandler):
+           utils.RideEventHandler, metaclass=TreeMetaclass):
 
     _RESOURCES_NODE_LABEL = 'External Resources'
 

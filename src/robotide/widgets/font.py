@@ -24,5 +24,5 @@ class Font(object):
 
     def _get_font(self, scale=0, family=wx.FONTFAMILY_DEFAULT, underlined=False):
         size = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT).GetPointSize()
-        return wx.Font(size + scale, family, wx.FONTWEIGHT_NORMAL,
-                       wx.FONTSTYLE_NORMAL, underline=underlined)
+        return wx.Font(pointSize = size + scale, family = family, 
+                       style = wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL, underline=underlined)

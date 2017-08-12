@@ -43,7 +43,7 @@ class RIDE(wx.App):
 
     def OnInit(self):
         # Needed for SetToolTipString to work
-        wx.HelpProvider_Set(wx.SimpleHelpProvider())
+        wx.HelpProvider.Set(wx.SimpleHelpProvider())
         self.settings = RideSettings()
         librarydatabase.initialize_database()
         self.preferences = Preferences(self.settings)
@@ -97,7 +97,8 @@ class RIDE(wx.App):
 
     def _find_robot_installation(self):
         output = utils.run_python_command(
-            ['import robot; print robot.__file__ + ", " + robot.__version__'])
+            ['import robot; print (str(robot.__file__) + ", " + str(robot.__version__))'])
+        print(output)
         robot_found = 'ImportError' not in output
         if robot_found:
             rf_file, rf_version = output.strip().split(', ')

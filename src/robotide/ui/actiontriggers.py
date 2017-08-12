@@ -211,6 +211,7 @@ class _MenuItem(object):
 
     def set_enabled(self):
         self._wx_menu_item.Enable(True)
+        
 
 
 class MenuItem(_MenuItem):
@@ -223,7 +224,8 @@ class SeparatorMenuItem(_MenuItem):
 
     def set_wx_menu_item(self, wx_menu_item):
         _MenuItem.set_wx_menu_item(self, wx_menu_item)
-        self._wx_menu_item.SetId(self.id)
+        #remove by yyf. FIXME:: wxpython3 has no this method, maybe no need any more
+        #self._wx_menu_item.SetId(self.id)
 
     def _is_enabled(self):
         return False

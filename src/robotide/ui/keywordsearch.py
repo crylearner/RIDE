@@ -12,18 +12,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import wx
-from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+import functools
 import os.path
 
+from robotide import utils
 from robotide.controller.filecontrollers import (ResourceFileController,
                                                  TestCaseFileController)
 from robotide.pluginapi import (Plugin, ActionInfo, RideOpenSuite,
         RideOpenResource, RideImportSetting, RideUserKeyword, RideNewProject)
 from robotide.usages.UsageRunner import Usages
-from robotide import utils
 from robotide.widgets import (PopupMenuItem, ButtonWithHandler, Label, Font,
         HtmlWindow, ImageProvider)
+import wx
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+
 
 ALL_KEYWORDS = '<all keywords>'
 ALL_USER_KEYWORDS = '<all user keywords>'
@@ -340,7 +342,7 @@ class _KeywordData(list):
         return result
 
     def _sort_by_attr(self, keywords, sort_order):
-        return sorted(keywords, cmp=self._get_comparator_for(self.headers[sort_order.column].lower()),
+        return sorted(keywords, functools.cmp_to_key(self._get_comparator_for(self.headers[sort_order.column].lower())),
                       reverse=not sort_order.sort_up)
 
     def _get_comparator_for(self, atrr_name):
@@ -376,7 +378,7 @@ class _KeywordList(wx.ListCtrl, ListCtrlAutoWidthMixin):
 
     def _create_image_list(self):
         imglist = wx.ImageList(16, 16)
-        imglist.Add(wx.ArtProvider_GetBitmap(wx.ART_GO_UP, wx.ART_OTHER, (16, 16)))
+        imglist.Add(wx.ArtProvider.GetBitmap(wx.ART_GO_UP, wx.ART_OTHER, (16, 16)))
         self.SetImageList(imglist, wx.IMAGE_LIST_SMALL)
         return imglist
 

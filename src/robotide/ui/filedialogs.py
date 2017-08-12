@@ -266,7 +266,7 @@ class RobotFilePathDialog(wx.FileDialog):
     def __init__(self, window, controller, settings):
         self._controller = controller
         wx.FileDialog.__init__(
-            self, window, style=wx.OPEN, wildcard=self._get_wildcard(settings),
+            self, window, style=wx.FD_OPEN, wildcard=self._get_wildcard(settings),
             defaultDir=self._controller.default_dir, message='Open')
 
     def _get_wildcard(self, settings):
