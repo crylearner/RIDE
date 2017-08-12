@@ -112,7 +112,7 @@ class _PluginEnablationCheckBox(wx.CheckBox):
     def _execute(self, method):
         try:
             method()
-        except Exception, err:
+        except Exception as err:
             self.SetValue(False)
             self.Enable(False)
             msg = 'Failed to %s plugin %s:\n%s' % (method.__name__,
@@ -130,7 +130,7 @@ class _PluginRow(wx.Panel):
         wx.Panel.__init__(self, parent)
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self._get_name(plugin))
-        for name, value in plugin.metadata.items():
+        for name, value in list(plugin.metadata.items()):
             sizer.Add(self._get_metadata(name, value))
         sizer.Add(self._get_description(plugin), 0, wx.EXPAND)
         config = plugin.config_panel(self)

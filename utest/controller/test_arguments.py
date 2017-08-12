@@ -12,27 +12,27 @@ class TestParseArguments(unittest.TestCase):
         assert_equals(parsed['${my arg}'], '')
         assert_equals(parsed['${default}'], 'huhuu')
         assert_equals(parsed['@{list}'], [])
-        assert_equals(len(parsed.keys()), 3)
+        assert_equals(len(list(parsed.keys())), 3)
 
     def test_parse_with_no_args(self):
         parsed = parse_arguments_to_var_dict([], 'Keyword name')
-        assert_equals(len(parsed.keys()), 0)
+        assert_equals(len(list(parsed.keys())), 0)
 
     def test_embedded_arguments(self):
         parsed = parse_arguments_to_var_dict([], "Here is ${arg} and ${another arg}")
         assert_equals(parsed['${arg}'], None)
         assert_equals(parsed['${another arg}'], None)
-        assert_equals(len(parsed.keys()), 2)
+        assert_equals(len(list(parsed.keys())), 2)
 
     def test_embedded_arguments_with_list_var_syntax(self):
         parsed = parse_arguments_to_var_dict([], "Here is ${arg} and @{list arg}")
         assert_equals(parsed['${arg}'], None)
-        assert_equals(len(parsed.keys()), 1)
+        assert_equals(len(list(parsed.keys())), 1)
 
     def test_embedded_arguments_with_args(self):
         parsed = parse_arguments_to_var_dict(['${my arg}'], "Here is ${arg} and ${another arg}")
         assert_equals(parsed['${my arg}'], '')
-        assert_equals(len(parsed.keys()), 1)
+        assert_equals(len(list(parsed.keys())), 1)
 
 
 class TestArgument(unittest.TestCase):

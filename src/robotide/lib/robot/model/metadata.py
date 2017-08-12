@@ -21,7 +21,7 @@ class Metadata(NormalizedDict):
         NormalizedDict.__init__(self, initial, ignore='_')
 
     def __unicode__(self):
-        return u'{%s}' % ', '.join('%s: %s' % (k, self[k]) for k in self)
+        return '{%s}' % ', '.join('%s: %s' % (k, self[k]) for k in self)
 
     def __str__(self):
-        return unicode(self).encode('ASCII', 'replace')
+        return str(self).encode('ASCII', 'replace')

@@ -133,7 +133,7 @@ class _RunnableHandler(object):
     def _log_args(self, positional, named):
         positional = [utils.prepr(arg) for arg in positional]
         named = ['%s=%s' % (utils.unic(name), utils.prepr(value))
-                 for name, value in named.items()]
+                 for name, value in list(named.items())]
         return 'Arguments: [ %s ]' % ' | '.join(positional + named)
 
     def _runner_for(self, handler, context, positional, named, timeout):

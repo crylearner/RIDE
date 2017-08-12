@@ -23,7 +23,7 @@ class LibraryListeners(Listeners):
         self._setup_or_teardown_type = None
         self._global_listeners = {}
 
-    def __nonzero__(self):
+    def __bool__(self):
         return True
 
     def _notify_end_test(self, listener, test):
@@ -40,7 +40,7 @@ class LibraryListeners(Listeners):
         for listener in self._listeners:
             self._notify_end_suite(listener, suite)
         if not suite.parent:
-            for listener in self._global_listeners.values():
+            for listener in list(self._global_listeners.values()):
                 listener.call_method(listener.close)
 
     @property

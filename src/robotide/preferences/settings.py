@@ -44,9 +44,9 @@ def _copy_or_migrate_user_settings(settings_dir, source_path, dest_file_name):
     else:
         try:
             SettingsMigrator(source_path, settings_path).migrate()
-        except ConfigObjError, parsing_error:
-            print 'WARNING! corrupted configuration file replaced with defaults'
-            print parsing_error
+        except ConfigObjError as parsing_error:
+            print('WARNING! corrupted configuration file replaced with defaults')
+            print(parsing_error)
             shutil.copyfile(source_path, settings_path)
     return os.path.abspath(settings_path)
 
@@ -60,7 +60,7 @@ class SettingsMigrator(object):
         self._user_path = user_path
         try:
             self._old_settings = ConfigObj(user_path, unrepr=True)
-        except UnreprError, err:
+        except UnreprError as err:
             raise ConfigurationError("Invalid config file '%s': %s" %
                                      (user_path, err))
 
@@ -221,7 +221,7 @@ class _Section(object):
 
     def iteritems(self):
         '''Returns an iterator over the (key,value) items of the section'''
-        return self._config_obj.iteritems()
+        return iter(list(self._config_obj.items()))
 
     def has_setting(self, name):
         return name in self._config_obj
@@ -254,7 +254,7 @@ class _Section(object):
         if isinstance(value, _Section):
             if override:
                 self._config_obj[name] = {}
-            for key, _value in value._config_obj.items():
+            for key, _value in list(value._config_obj.items()):
                 self[name].set(key, _value, autosave, override)
         elif name not in self._config_obj or override:
             old = self._config_obj[name] if name in self._config_obj else None
@@ -270,7 +270,7 @@ class _Section(object):
         See method set for more info about 'autosave' and 'override'.
         """
         if settings:
-            for key, value in settings.items():
+            for key, value in list(settings.items()):
                 self.set(key, value, autosave=False, override=override)
             if autosave:
                 self.save()
@@ -301,7 +301,7 @@ class Settings(_Section):
     def __init__(self, user_path):
         try:
             _Section.__init__(self, ConfigObj(user_path, unrepr=True))
-        except UnreprError, error:
+        except UnreprError as error:
             raise ConfigurationError(error)
         self.excludes = excludes.Excludes(SETTINGS_DIRECTORY)
 

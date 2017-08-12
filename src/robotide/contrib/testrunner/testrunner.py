@@ -26,7 +26,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-import SocketServer
+import socketserver
 import atexit
 import codecs
 import os
@@ -37,7 +37,7 @@ import tempfile
 import threading
 import signal
 import sys
-from Queue import Empty, Queue
+from queue import Empty, Queue
 
 from robotide import utils
 from robotide.robotapi import LOG_LEVELS
@@ -392,7 +392,7 @@ class StreamReaderThread(object):
 
     def pop(self):
         result = ""
-        for _ in xrange(self._queue.qsize()):
+        for _ in range(self._queue.qsize()):
             try:
                 result += self._queue.get_nowait()
             except Empty:
@@ -404,14 +404,14 @@ class StreamReaderThread(object):
 # server. It is designed to run in a separate thread, read data
 # from the given port and update the UI -- hopefully all in a
 # thread-safe manner.
-class RideListenerServer(SocketServer.TCPServer):
+class RideListenerServer(socketserver.TCPServer):
     """Implements a simple line-buffered socket server"""
     allow_reuse_address = True
     def __init__(self, RequestHandlerClass, callback):
-        SocketServer.TCPServer.__init__(self, ("",0), RequestHandlerClass)
+        socketserver.TCPServer.__init__(self, ("",0), RequestHandlerClass)
         self.callback = callback
 
-class RideListenerHandler(SocketServer.StreamRequestHandler):
+class RideListenerHandler(socketserver.StreamRequestHandler):
     def handle(self):
         decoder = TestRunnerAgent.StreamHandler(self.request.makefile('r'))
         while True:

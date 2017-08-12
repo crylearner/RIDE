@@ -56,7 +56,7 @@ class Namespace(object):
             if path not in sys.path:
                 normalized = path.replace('/', os.sep)
                 sys.path.insert(0, normalized)
-                RideLogMessage(u'Inserted \'{0}\' to sys.path.'
+                RideLogMessage('Inserted \'{0}\' to sys.path.'
                                .format(normalized)).publish()
 
     def _setting_changed(self, message):
@@ -143,7 +143,7 @@ class Namespace(object):
         return sugs
 
     def _add_kw_arg_vars(self, controller, variables):
-        for name, value in controller.get_local_variables().iteritems():
+        for name, value in list(controller.get_local_variables().items()):
             variables.set_argument(name, value)
 
     def _keyword_suggestions(self, datafile, start, ctx):
@@ -282,7 +282,7 @@ class _VariableStash(object):
     def __init__(self):
         self._vars = robotapi.RobotVariables()
         self._sources = {}
-        for k, v in self.global_variables.iteritems():
+        for k, v in list(self.global_variables.items()):
             self.set(k, v, 'built-in')
 
     def set(self, name, value, source):
@@ -337,10 +337,10 @@ class _VariableStash(object):
             return '$'
 
     def __iter__(self):
-        for name, value in self._vars.store.data.items():
+        for name, value in list(self._vars.store.data.items()):
             source = self._sources[name]
             prefix = self._get_prefix(value)
-            name = u'{0}{{{1}}}'.format(prefix, name)
+            name = '{0}{{{1}}}'.format(prefix, name)
             if source == self.ARGUMENT_SOURCE:
                 yield ArgumentInfo(name, value)
             else:

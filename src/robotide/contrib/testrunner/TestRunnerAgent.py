@@ -44,7 +44,7 @@ import os
 import sys
 import socket
 import threading
-import SocketServer
+import socketserver
 
 try:
     from robot.errors import ExecutionFailed
@@ -66,14 +66,14 @@ else:
         _JSONAVAIL=False
 
 try:
-    import cPickle as pickle
+    import pickle as pickle
 except ImportError:
     import pickle as pickle
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 HOST = "localhost"
 
@@ -193,9 +193,9 @@ class TestRunnerAgent:
             # Iron python does not return right object type if not binary mode
             self.filehandler = self.sock.makefile('wb')
             self.streamhandler = StreamHandler(self.filehandler)
-        except socket.error, e:
-            print('unable to open socket to "%s:%s" error: %s'
-                  % (self.host, self.port, str(e)))
+        except socket.error as e:
+            print(('unable to open socket to "%s:%s" error: %s'
+                  % (self.host, self.port, str(e))))
             self.sock = None
             self.filehandler = None
 
@@ -266,13 +266,13 @@ class RobotDebugger(object):
         return self._state == 'pause'
 
 
-class RobotKillerServer(SocketServer.TCPServer):
+class RobotKillerServer(socketserver.TCPServer):
     allow_reuse_address = True
     def __init__(self, debugger):
-        SocketServer.TCPServer.__init__(self, ("",0), RobotKillerHandler)
+        socketserver.TCPServer.__init__(self, ("",0), RobotKillerHandler)
         self.debugger = debugger
 
-class RobotKillerHandler(SocketServer.StreamRequestHandler):
+class RobotKillerHandler(socketserver.StreamRequestHandler):
     def handle(self):
         data = self.request.makefile('r').read().strip()
         if data == 'kill':
@@ -463,7 +463,7 @@ class StreamHandler(object):
                 return pickle.loads(buff.getvalue())
             else:
                 raise DecodeError("Message type %r not supported" % msgtype)
-        except DecodeError.wrapped_exceptions, e:
+        except DecodeError.wrapped_exceptions as e:
             raise DecodeError(str(e))
 
     def _load_header(self):

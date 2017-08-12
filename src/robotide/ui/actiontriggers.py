@@ -79,14 +79,14 @@ class _Menu(object):
     def OnMenuOpen(self, event):
         if self.wx_menu == event.GetMenu() and not self._open:
             self._open = True
-            for menu_item in self._menu_items.values():
+            for menu_item in list(self._menu_items.values()):
                 menu_item.refresh_availability()
         event.Skip()
 
     def OnMenuClose(self, event):
         if self._open:
             self._open = False
-            for menu_item in self._menu_items.values():
+            for menu_item in list(self._menu_items.values()):
                 menu_item.set_enabled()
         event.Skip()
 
@@ -110,7 +110,7 @@ class _Menu(object):
         return menu_item
 
     def _get_menu_item(self, action):
-        for menu_item in self._menu_items.values():
+        for menu_item in list(self._menu_items.values()):
             if self._names_equal(menu_item, action):
                 return menu_item
         return None
@@ -339,7 +339,7 @@ class ShortcutRegistry(object):
 
     def _update_accerelator_table(self):
         accerelators = []
-        for delegator in self._actions.values():
+        for delegator in list(self._actions.values()):
             flags, key_code = delegator.shortcut.parse()
             accerelators.append(wx.AcceleratorEntry(flags, key_code, delegator.id))
         self._frame.SetAcceleratorTable(wx.AcceleratorTable(accerelators))

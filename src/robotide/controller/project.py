@@ -303,7 +303,7 @@ class Serializer(object):
         with Backup(controller):
             try:
                 controller.datafile.save(**self._get_options())
-            except Exception, err:
+            except Exception as err:
                 self._cache_error(controller, err)
                 raise
 
@@ -328,7 +328,7 @@ class Serializer(object):
 
     def _cache_error(self, data, error):
         self._errors.append("Error in serializing '%s':\n%s"
-                            % (data.data.source, unicode(error)))
+                            % (data.data.source, str(error)))
 
     def _log_errors(self):
         if self._errors:

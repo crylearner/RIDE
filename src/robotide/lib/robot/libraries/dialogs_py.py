@@ -14,7 +14,7 @@
 
 import sys
 from threading import currentThread
-from Tkinter import (Tk, Toplevel, Frame, Listbox, Label, Button, Entry,
+from tkinter import (Tk, Toplevel, Frame, Listbox, Label, Button, Entry,
                      BOTH, END, LEFT, W)
 
 

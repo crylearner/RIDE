@@ -54,4 +54,4 @@ class Runner(object):
     def get_result(self):
         if not self._error:
             return self._result
-        raise self._error[0], self._error[1], self._error[2]
+        raise self._error[0](self._error[1]).with_traceback(self._error[2])

@@ -47,7 +47,7 @@ class Namespace(object):
 
     @property
     def libraries(self):
-        return self._kw_store.libraries.values()
+        return list(self._kw_store.libraries.values())
 
     def handle_imports(self):
         self._import_default_libraries()
@@ -64,7 +64,7 @@ class Namespace(object):
                     raise DataError('%s setting requires a name' % item.type)
                 self._import(item)
             except DataError as err:
-                item.report_invalid_syntax(unicode(err))
+                item.report_invalid_syntax(str(err))
 
     def _import(self, import_setting):
         action = {'Library': self._import_library,
@@ -152,7 +152,7 @@ class Namespace(object):
 
     def _raise_replacing_vars_failed(self, import_setting, err):
         raise DataError("Replacing variables from setting '%s' failed: %s"
-                        % (import_setting.type, unicode(err)))
+                        % (import_setting.type, str(err)))
 
     def _get_name(self, name, basedir, import_type):
         if import_type == 'Library' and not self._is_library_by_path(name):
@@ -215,7 +215,7 @@ class Namespace(object):
         try:
             handler = self._kw_store.get_handler(name)
         except DataError as err:
-            handler = UserErrorHandler(name, unicode(err))
+            handler = UserErrorHandler(name, str(err))
         self._replace_variables_from_user_handlers(handler)
         return handler
 
@@ -244,7 +244,7 @@ class KeywordStore(object):
     def _get_lib_by_instance(self, instance):
         if instance is None:
             raise KeyError
-        for lib in self.libraries.values():
+        for lib in list(self.libraries.values()):
             if lib.get_instance(create=False) == instance:
                 return lib
         raise KeyError
@@ -302,7 +302,7 @@ class KeywordStore(object):
             return self.user_keywords.handlers[name]
 
     def _get_handler_from_resource_file_user_keywords(self, name):
-        found = [lib.handlers[name] for lib in self.resources.values()
+        found = [lib.handlers[name] for lib in list(self.resources.values())
                  if name in lib.handlers]
         if not found:
             return None
@@ -313,7 +313,7 @@ class KeywordStore(object):
         self._raise_multiple_keywords_found(name, found)
 
     def _get_handler_from_library_keywords(self, name):
-        found = [lib.handlers[name] for lib in self.libraries.values()
+        found = [lib.handlers[name] for lib in list(self.libraries.values())
                  if name in lib.handlers]
         if not found:
             return None
@@ -387,7 +387,7 @@ class KeywordStore(object):
 
     def _find_keywords(self, owner_name, name):
         return [owner.handlers[name]
-                for owner in self.libraries.values() + self.resources.values()
+                for owner in list(self.libraries.values()) + list(self.resources.values())
                 if eq(owner.name, owner_name) and name in owner.handlers]
 
     def _raise_multiple_keywords_found(self, name, found, implicit=True):
@@ -437,7 +437,7 @@ class KeywordRecommendationFinder(object):
                     'Reserved']
         handlers = [(None, printable_name(handler.name, True))
                     for handler in self.user_keywords.handlers]
-        for library in (self.libraries.values() + self.resources.values()):
+        for library in (list(self.libraries.values()) + list(self.resources.values())):
             if library.name not in excluded:
                 handlers.extend(
                     ((library.name,

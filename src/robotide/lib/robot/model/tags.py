@@ -55,13 +55,13 @@ class Tags(object):
         return iter(self._tags)
 
     def __unicode__(self):
-        return u'[%s]' % ', '.join(self)
+        return '[%s]' % ', '.join(self)
 
     def __repr__(self):
         return repr(list(self))
 
     def __str__(self):
-        return unicode(self).encode('UTF-8')
+        return str(self).encode('UTF-8')
 
     def __getitem__(self, index):
         item = self._tags[index]
@@ -114,7 +114,7 @@ class _SingleTagPattern(object):
     def __unicode__(self):
         return self._matcher.pattern
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._matcher)
 
 

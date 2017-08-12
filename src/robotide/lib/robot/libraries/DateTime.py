@@ -293,7 +293,7 @@ Additionally helper classes ``Date`` and ``Time`` can be used directly:
 |     # ...
 """
 
-from datetime import datetime, timedelta
+from .datetime import datetime, timedelta
 import time
 import re
 

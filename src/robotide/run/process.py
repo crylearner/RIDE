@@ -29,7 +29,7 @@ class Process(object):
         self._out_fd = None
 
     def _parse_command(self, command):
-        if isinstance(command, basestring):
+        if isinstance(command, str):
             return [val.replace('<SPACE>', ' ') for val in command.split()]
         return command
 
@@ -44,7 +44,7 @@ class Process(object):
         try:
             self._process = subprocess.Popen(self._command, stdout=self._out_fd,
                                              stderr=subprocess.STDOUT)
-        except OSError, err:
+        except OSError as err:
             self._error = str(err)
 
     def is_finished(self):

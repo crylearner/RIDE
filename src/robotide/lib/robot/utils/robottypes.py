@@ -14,7 +14,7 @@
 
 from collections import Mapping
 from UserDict import UserDict
-from UserString import UserString
+from collections import UserString
 try:
     from java.lang import String
 except ImportError:
@@ -22,11 +22,11 @@ except ImportError:
 
 
 def is_integer(item):
-    return isinstance(item, (int, long))
+    return isinstance(item, int)
 
 
 def is_number(item):
-    return isinstance(item, (int, long, float))
+    return isinstance(item, (int, float))
 
 
 def is_bytes(item):
@@ -34,15 +34,15 @@ def is_bytes(item):
 
 
 def is_string(item):
-    return isinstance(item, basestring)
+    return isinstance(item, str)
 
 
 def is_unicode(item):
-    return isinstance(item, unicode)
+    return isinstance(item, str)
 
 
 def is_list_like(item):
-    if isinstance(item, (basestring, UserString, String)):
+    if isinstance(item, (str, UserString, String)):
         return False
     try:
         iter(item)
@@ -57,7 +57,7 @@ def is_dict_like(item):
 
 
 def is_truthy(item):
-    if isinstance(item, basestring):
+    if isinstance(item, str):
         return item.upper() not in ('FALSE', 'NO', '')
     return bool(item)
 
@@ -68,7 +68,7 @@ def is_falsy(item):
 
 def type_name(item):
     cls = item.__class__ if hasattr(item, '__class__') else type(item)
-    named_types = {str: 'string', unicode: 'string', bool: 'boolean',
-                   int: 'integer', long: 'integer', type(None): 'None',
+    named_types = {str: 'string', str: 'string', bool: 'boolean',
+                   int: 'integer', int: 'integer', type(None): 'None',
                    dict: 'dictionary'}
     return named_types.get(cls, cls.__name__)

@@ -65,7 +65,7 @@ def _single_result(source, options):
         error = err.strerror
     except:
         error = get_error_message()
-    raise DataError("Reading XML source '%s' failed: %s" % (unicode(ets), error))
+    raise DataError("Reading XML source '%s' failed: %s" % (str(ets), error))
 
 
 class ExecutionResultBuilder(object):

@@ -829,7 +829,7 @@ class ProcessConfig(object):
     def _construct_env(self, env, extra):
         if env:
             env = dict((encode_to_system(k), encode_to_system(v))
-                       for k, v in env.items())
+                       for k, v in list(env.items()))
         for key in extra:
             if not key.startswith('env:'):
                 raise RuntimeError("Keyword argument '%s' is not supported by "

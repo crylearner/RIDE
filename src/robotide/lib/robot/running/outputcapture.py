@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import sys
-from StringIO import StringIO
+from io import StringIO
 
 from robotide.lib.robot.output import LOGGER
 from robotide.lib.robot.utils import decode_output, encode_output, JYTHON
@@ -107,7 +107,7 @@ if not JYTHON:
             pass
 
         def release(self):
-            return u''
+            return ''
 
 else:
 

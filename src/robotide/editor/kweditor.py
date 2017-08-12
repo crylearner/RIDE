@@ -338,7 +338,7 @@ class KeywordEditor(GridEditor, RideEventHandler):
         if not self.IsCellEditControlShown():
             data = self._clipboard_handler.clipboard_content()
             if data:
-                data = [[data]] if isinstance(data, basestring) else data
+                data = [[data]] if isinstance(data, str) else data
                 self._execute(command_class(self.selection.topleft, data))
 
     @requires_focus
@@ -569,8 +569,8 @@ class KeywordEditor(GridEditor, RideEventHandler):
             return
         try:
             self._execute(AddKeywordFromCells(cells))
-        except ValueError, err:
-            wx.MessageBox(unicode(err))
+        except ValueError as err:
+            wx.MessageBox(str(err))
 
     def _data_cells_from_current_row(self):
         currow, curcol = self.selection.cell
@@ -712,7 +712,7 @@ class ContentAssistCellEditor(grid.PyGridCellEditor):
         if key is wx.WXK_DELETE or key > 255:
             self._grid.HideCellEditControl()
             return
-        self._tc.SetValue(unichr(key))
+        self._tc.SetValue(chr(key))
         self._tc.SetFocus()
         self._tc.SetInsertionPointEnd()
 

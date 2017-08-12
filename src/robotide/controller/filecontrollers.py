@@ -15,7 +15,7 @@
 import os
 from itertools import chain
 import shutil
-import commands
+from . import commands
 from robotide.controller.dataloader import ExcludedDirectory, TestData
 
 from robotide.publish import (RideDataFileRemoved, RideInitFileRemoved,
@@ -315,7 +315,7 @@ class TestDataDirectoryController(_DataController, _FileSystemElement, _BaseCont
 
     def __init__(self, data, project=None, parent=None):
         dir_ = data.directory
-        dir_ = os.path.abspath(dir_) if isinstance(dir_, basestring) else dir_
+        dir_ = os.path.abspath(dir_) if isinstance(dir_, str) else dir_
         _FileSystemElement.__init__(self, self._filename(data), dir_)
         _DataController.__init__(self, data, project, parent)
         self._dir_controllers = {}

@@ -124,7 +124,7 @@ class PybotProfile(BaseProfile):
     It is assumed that pybot is on the path
     '''
     name = "pybot"
-    default_settings = {"arguments": u"",
+    default_settings = {"arguments": "",
                         "include_tags": "",
                         "exclude_tags": "",
                         "apply_include_tags": False,
@@ -208,7 +208,7 @@ class PybotProfile(BaseProfile):
         sizer.Add(label, 0, wx.ALL | wx.EXPAND)
         sizer.Add(self._arguments, 1, wx.ALL | wx.EXPAND)
         panel.SetSizerAndFit(sizer)
-        self._validate_arguments(self.arguments or u'')
+        self._validate_arguments(self.arguments or '')
         return panel
 
     def TagsPanel(self, parent):
@@ -245,11 +245,11 @@ class PybotProfile(BaseProfile):
 
     def OnArgumentsChanged(self, evt):
         args = self._arguments.GetValue()
-        self._validate_arguments(args or u'')
+        self._validate_arguments(args or '')
         self.set_setting("arguments", args)
 
     def _validate_arguments(self, args):
-        assert type(args) is unicode
+        assert type(args) is str
         invalid_message = self._get_invalid_message(args)
         self._arguments.SetBackgroundColour(
             'red' if invalid_message else 'white')
@@ -266,7 +266,7 @@ class PybotProfile(BaseProfile):
             if bool(invalid):
                 return 'Unknown option(s): '+' '.join(invalid)
             return None
-        except DataError, e:
+        except DataError as e:
             return e.message
         except Information:
             return 'Does not execute - help or version option given'

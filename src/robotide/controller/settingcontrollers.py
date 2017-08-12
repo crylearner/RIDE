@@ -65,7 +65,7 @@ class _SettingController(ControllerWithParent):
         return ''
 
     def contains_keyword(self, name):
-        matcher = name.match if not isinstance(name, basestring) \
+        matcher = name.match if not isinstance(name, str) \
             else lambda i: utils.eq(i, name)
         return self._contains_keyword(matcher)
 
@@ -212,6 +212,10 @@ class TagsController(_SettingController):
             self._tags.value = []
         tag.set_index(len(self._tags.value))
         self._tags.value.append(tag.name)
+
+    def remove(self, tag):
+        if tag in self._tags.value:
+            self._tags.value.remove(tag)
 
     def __iter__(self):
         forced = self._parent.force_tags
@@ -402,7 +406,7 @@ class VariableController(_SettingController):
         return self.parent.index(self)
 
     def set_value(self, name, value):
-        value = [value] if isinstance(value, basestring) else value
+        value = [value] if isinstance(value, str) else value
         self._var.name = name
         self._var.value = value
         self._parent.mark_dirty()

@@ -128,7 +128,7 @@ class PythonErrorDetails(_ErrorDetails):
             return unic(self._exc_type)
         name = self._get_name(self._exc_type)
         try:
-            msg = unicode(self.error)
+            msg = str(self.error)
         except UnicodeError:  # Happens if message is Unicode and version < 2.6
             msg = ' '.join(unic(a) for a in self.error.args)
         return self._format_message(name, msg)

@@ -109,8 +109,8 @@ class TestLibrariesSuggester(_ImportSuggesterTests, unittest.TestCase):
 
     def test_history(self):
         self._assert_suggestion_names([], 'ooz')
-        self._history_suggester.store(u'zooZoo')
-        self._assert_suggestion_names([u'zooZoo'], 'ooz')
+        self._history_suggester.store('zooZoo')
+        self._assert_suggestion_names(['zooZoo'], 'ooz')
 
 
 if __name__ == '__main__':

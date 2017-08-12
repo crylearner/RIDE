@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from _sqlite3 import OperationalError
-import Queue
+import queue
 import os
 from threading import Thread
 
@@ -28,7 +28,7 @@ class LibraryManager(Thread):
     def __init__(self, database_name, spec_initializer=None):
         self._database_name = database_name
         self._database = None
-        self._messages = Queue.Queue()
+        self._messages = queue.Queue()
         self._spec_initializer = spec_initializer or SpecInitializer()
         Thread.__init__(self)
         self.setDaemon(True)
@@ -39,7 +39,7 @@ class LibraryManager(Thread):
             try:
                 if not self._handle_message():
                     break
-            except Exception, err:
+            except Exception as err:
                 msg = 'Library import handling threw an unexpected exception'
                 RideLogException(message=msg, exception=err, level='WARN').publish()
         self._database.close()
@@ -79,8 +79,8 @@ class LibraryManager(Thread):
             path = get_path(
                 library_name.replace('/', os.sep), os.path.abspath('.'))
             return get_import_result(path, library_args)
-        except Exception, err:
-            print 'FAILED', library_name, err
+        except Exception as err:
+            print(('FAILED', library_name, err))
             kws = self._spec_initializer.init_from_spec(library_name)
             if not kws:
                 msg = 'Importing test library "%s" failed' % library_name
@@ -114,7 +114,7 @@ class LibraryManager(Thread):
     def _call(self, callback, *args):
         try:
             callback(*args)
-        except Exception, err:
+        except Exception as err:
             msg = 'Library import callback threw an unexpected exception'
             RideLogException(message=msg, exception=err, level='WARN').publish()
 
@@ -123,14 +123,14 @@ class LibraryManager(Thread):
                            timeout=3)
 
     def get_and_insert_keywords(self, library_name, library_args):
-        result_queue = Queue.Queue(maxsize=1)
+        result_queue = queue.Queue(maxsize=1)
         self._messages.put(
             ('insert', library_name, library_args, result_queue), timeout=3)
         try:
             return result_queue.get(timeout=5)
-        except Queue.Empty as e:
-            RideLogMessage(u'Failed to read keywords from library db: {}'
-                           .format(unicode(e))).publish()
+        except queue.Empty as e:
+            RideLogMessage('Failed to read keywords from library db: {}'
+                           .format(str(e))).publish()
             return []
 
     def create_database(self):

@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from robotide.lib.robot.errors import DataError
 from robotide.lib.robot.htmldata import HtmlFileWriter, ModelWriter, JsonWriter, LIBDOC
@@ -111,11 +111,11 @@ class DocFormatter(object):
 
     def _escape_and_encode_targets(self, targets):
         return NormalizedDict((html_escape(key), self._encode_uri_component(value))
-                              for key, value in targets.iteritems())
+                              for key, value in list(targets.items()))
 
     def _encode_uri_component(self, value):
         # Emulates encodeURIComponent javascript function
-        return urllib.quote(value.encode('UTF-8'), safe="-_.!~*'()")
+        return urllib.parse.quote(value.encode('UTF-8'), safe="-_.!~*'()")
 
     def html(self, doc, intro=False):
         doc = self._doc_to_html(doc)

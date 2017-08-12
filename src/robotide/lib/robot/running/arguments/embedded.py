@@ -27,7 +27,7 @@ class EmbeddedArguments(object):
         else:
             self.name, self.args = None, []
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.name is not None
 
 

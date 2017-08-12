@@ -50,5 +50,5 @@ class StringCache(object):
         return '*'+text
 
     def dump(self):
-        return tuple(item[0] for item in sorted(self._cache.iteritems(),
+        return tuple(item[0] for item in sorted(iter(list(self._cache.items())),
                                                 key=itemgetter(1)))

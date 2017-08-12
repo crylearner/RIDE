@@ -115,7 +115,7 @@ class TagSearchMatcher(object):
         self._tag_pattern_excludes = robotapi.TagPatterns(excludes.split())
 
     def matches(self, test):
-        tags = [unicode(tag) for tag in test.tags]
+        tags = [str(tag) for tag in test.tags]
         if self._matches(tags):
             return test.longname
         return False
@@ -141,7 +141,7 @@ class TestSearchMatcher(object):
         name = test.name.lower()
         if self._match_in(name):
             return True
-        if any(self._match_in(unicode(tag).lower()) for tag in test.tags):
+        if any(self._match_in(str(tag).lower()) for tag in test.tags):
             return True
         doc = test.documentation.value.lower()
         if self._match_in(doc):
@@ -206,7 +206,7 @@ class SearchResult(object):
 
     def _tags(self):
         if self.__tags is None:
-            self.__tags = [unicode(tag).lower() for tag in self._test.tags]
+            self.__tags = [str(tag).lower() for tag in self._test.tags]
         return self.__tags
 
     def __repr__(self):

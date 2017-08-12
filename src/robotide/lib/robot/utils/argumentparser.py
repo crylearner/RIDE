@@ -174,14 +174,14 @@ class ArgumentParser(object):
         except KeyError:
             raise FrameworkError("No 'escape' in options")
         escapes = self._get_escapes(escape_strings)
-        for name, value in opts.items():
+        for name, value in list(opts.items()):
             if name != 'escape':
                 opts[name] = self._unescape(value, escapes)
         return opts, [self._unescape(arg, escapes) for arg in args]
 
     def _process_possible_argfile(self, args):
         options = ['--argumentfile']
-        for short_opt, long_opt in self._short_to_long.items():
+        for short_opt, long_opt in list(self._short_to_long.items()):
             if long_opt == 'argumentfile':
                 options.append('-'+short_opt)
         return ArgFileParser(options).process(args)
@@ -206,7 +206,7 @@ class ArgumentParser(object):
             return value
         if is_list_like(value):
             return [self._unescape(item, escapes) for item in value]
-        for esc_name, esc_value in escapes.items():
+        for esc_name, esc_value in list(escapes.items()):
             if esc_name in value:
                 value = value.replace(esc_name, esc_value)
         return value
@@ -322,7 +322,7 @@ class ArgumentParser(object):
         return ret
 
     def _get_available_escapes(self):
-        names = sorted(ESCAPES.keys(), key=str.lower)
+        names = sorted(list(ESCAPES.keys()), key=str.lower)
         return ', '.join('%s (%s)' % (n, ESCAPES[n]) for n in names)
 
     def _raise_help(self):
@@ -351,11 +351,11 @@ class ArgLimitValidator(object):
 
     def _parse_arg_limits(self, arg_limits):
         if arg_limits is None:
-            return 0, sys.maxint
+            return 0, sys.maxsize
         if is_integer(arg_limits):
             return arg_limits, arg_limits
         if len(arg_limits) == 1:
-            return arg_limits[0], sys.maxint
+            return arg_limits[0], sys.maxsize
         return arg_limits[0], arg_limits[1]
 
     def __call__(self, args):
@@ -366,7 +366,7 @@ class ArgLimitValidator(object):
         min_end = plural_or_not(min_args)
         if min_args == max_args:
             expectation = "%d argument%s" % (min_args, min_end)
-        elif max_args != sys.maxint:
+        elif max_args != sys.maxsize:
             expectation = "%d to %d arguments" % (min_args, max_args)
         else:
             expectation = "at least %d argument%s" % (min_args, min_end)

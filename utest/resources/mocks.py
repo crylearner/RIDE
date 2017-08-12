@@ -55,7 +55,7 @@ class FakeSettings(Settings):
         self.set('pythonpath', [])
         self.set('auto imports', [])
         if settings:
-            for key, val in settings.items():
+            for key, val in list(settings.items()):
                 self.set(key, val)
 
 

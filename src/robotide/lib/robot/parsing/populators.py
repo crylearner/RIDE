@@ -119,7 +119,7 @@ class FromDirectoryPopulator(object):
         try:
             FromFilePopulator(datadir).populate(init_file)
         except DataError as err:
-            LOGGER.error(unicode(err))
+            LOGGER.error(str(err))
 
     def _populate_children(self, datadir, children, include_suites, warn_on_skipped):
         for child in children:
@@ -127,7 +127,7 @@ class FromDirectoryPopulator(object):
                 datadir.add_child(child, include_suites)
             except DataError as err:
                 self._log_failed_parsing("Parsing data source '%s' failed: %s"
-                            % (child, unicode(err)), warn_on_skipped)
+                            % (child, str(err)), warn_on_skipped)
 
     def _log_failed_parsing(self, message, warn):
         if warn:
@@ -174,7 +174,7 @@ class FromDirectoryPopulator(object):
     def _list_dir(self, path):
         # os.listdir returns Unicode entries when path is Unicode
         names = os.listdir(unic(path))
-        for name in sorted(names, key=unicode.lower):
+        for name in sorted(names, key=str.lower):
             # unic needed to handle nfc/nfd normalization on OSX
             yield unic(name), unic(os.path.join(path, name))
 

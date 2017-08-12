@@ -118,7 +118,7 @@ class _Command(object):
         return ', '.join(self._format_param(p) for p in self._params())
 
     def _format_param(self, param):
-        if isinstance(param, basestring):
+        if isinstance(param, str):
             return '"%s"' % param
         return str(param)
 
@@ -688,7 +688,7 @@ class FindVariableOccurrences(FindOccurrences):
             [None, context.datafile_controller]
 
     def _is_builtin_variable(self, name):
-        return name in _VariableStash.global_variables.keys()
+        return name in list(_VariableStash.global_variables.keys())
 
     def _get_source_of_imported_var(self, name, context):
         for df in self._get_all_imported(context):

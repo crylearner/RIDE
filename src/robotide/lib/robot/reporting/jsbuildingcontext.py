@@ -39,7 +39,7 @@ class JsBuildingContext(object):
     def string(self, string, escape=True, attr=False):
         if escape and string:
             if not is_unicode(string):
-                string = unicode(string)
+                string = str(string)
             escaper = html_escape if not attr else html_attr_escape
             string = escaper(string)
         return self._strings.add(string)
@@ -56,7 +56,7 @@ class JsBuildingContext(object):
         if not time:
             return None
         # Must use `long` due to http://ironpython.codeplex.com/workitem/31549
-        millis = long(round(timestamp_to_secs(time) * 1000))
+        millis = int(round(timestamp_to_secs(time) * 1000))
         if self.basemillis is None:
             self.basemillis = millis
         return millis - self.basemillis

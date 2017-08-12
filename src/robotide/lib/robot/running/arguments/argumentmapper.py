@@ -47,7 +47,7 @@ class KeywordCallTemplate(object):
         self.args[:len(positional)] = positional
 
     def fill_named(self, named):
-        for name, value in named.items():
+        for name, value in list(named.items()):
             if name in self._positional and self._supports_named:
                 index = self._positional.index(name)
                 self.args[index] = value

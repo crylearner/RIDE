@@ -15,15 +15,14 @@
 from robotide.lib.robot.utils.setter import SetterAwareType
 
 
-class ModelObject(object):
+class ModelObject(object, metaclass=SetterAwareType):
     __slots__ = []
-    __metaclass__ = SetterAwareType
 
     def __unicode__(self):
         return self.name
 
     def __str__(self):
-        return unicode(self).encode('ASCII', 'replace')
+        return str(self).encode('ASCII', 'replace')
 
     def __repr__(self):
         return repr(str(self))

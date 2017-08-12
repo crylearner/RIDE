@@ -81,21 +81,21 @@ class TestSpecInitializer(unittest.TestCase):
 
     def test_pythonpath_is_preferred_before_xml_directory(self):
         specinitializer = MockedSpecInitializer()
-        self.assertEquals('OK', specinitializer.init_from_spec('name'))
+        self.assertEqual('OK', specinitializer.init_from_spec('name'))
         self.assertTrue(specinitializer.initialized_from_pythonpath)
         self.assertFalse(specinitializer.initialized_from_xml_directory)
 
     def test_default_directory_is_always_used(self):
         specinitializer = MockedSpecInitializer(pythonpath_return_value=None)
-        self.assertEquals('OK', specinitializer.init_from_spec('name'))
+        self.assertEqual('OK', specinitializer.init_from_spec('name'))
         self.assertFalse(specinitializer.initialized_from_pythonpath)
         self.assertTrue(specinitializer.initialized_from_xml_directory)
-        self.assertEquals(specinitializer.directory, LIBRARY_XML_DIRECTORY)
+        self.assertEqual(specinitializer.directory, LIBRARY_XML_DIRECTORY)
 
     def test_not_finding_correct_file(self):
         specinitializer = MockedSpecInitializer(
             pythonpath_return_value=None, directory_mapping={})
-        self.assertEquals(None, specinitializer.init_from_spec('name'))
+        self.assertEqual(None, specinitializer.init_from_spec('name'))
         self.assertFalse(specinitializer.initialized_from_pythonpath)
         self.assertFalse(specinitializer.initialized_from_xml_directory)
 
@@ -103,7 +103,7 @@ class TestSpecInitializer(unittest.TestCase):
         specinitializer = MockedSpecInitializer(
             directories=['my_dir'], pythonpath_return_value=None,
             directory_mapping={'my_dir': 'directory'})
-        self.assertEquals('OK', specinitializer.init_from_spec('name'))
+        self.assertEqual('OK', specinitializer.init_from_spec('name'))
         self.assertFalse(specinitializer.initialized_from_pythonpath)
         self.assertTrue(specinitializer.initialized_from_xml_directory)
-        self.assertEquals(specinitializer.directory, 'my_dir')
+        self.assertEqual(specinitializer.directory, 'my_dir')

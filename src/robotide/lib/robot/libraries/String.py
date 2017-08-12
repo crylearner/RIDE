@@ -15,7 +15,7 @@
 import re
 from fnmatch import fnmatchcase
 from random import randint
-from string import ascii_lowercase, ascii_uppercase, digits
+from .string import ascii_lowercase, ascii_uppercase, digits
 
 from robotide.lib.robot.api import logger
 from robotide.lib.robot.utils import is_bytes, is_string, is_truthy, is_unicode, lower, unic
@@ -507,7 +507,7 @@ class String(object):
                             ('[NUMBERS]', digits)]:
             chars = chars.replace(name, value)
         maxi = len(chars) - 1
-        return ''.join(chars[randint(0, maxi)] for _ in xrange(length))
+        return ''.join(chars[randint(0, maxi)] for _ in range(length))
 
     def get_substring(self, string, start, end=None):
         """Returns a substring from ``start`` index to ``end`` index.

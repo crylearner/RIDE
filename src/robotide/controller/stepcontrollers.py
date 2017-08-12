@@ -183,7 +183,7 @@ class StepController(_BaseController):
 
     def _get_last_none_empty_col_idx(self):
         values = self.as_list()
-        for i in reversed(range(len(values))):
+        for i in reversed(list(range(len(values)))):
             if values[i].strip() != '':
                 return i
         return None
@@ -213,7 +213,7 @@ class StepController(_BaseController):
                    for item in [self.keyword or ''] + self.args)
 
     def _kw_name_match(self, item, expected):
-        if isinstance(expected, basestring):
+        if isinstance(expected, str):
             return utils.eq(item, expected) or (
                 self._GIVEN_WHEN_THEN_MATCHER.match(item) and
                 utils.eq(

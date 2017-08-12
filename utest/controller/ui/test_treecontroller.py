@@ -25,7 +25,7 @@ class TestTreeController(unittest.TestCase):
     def test_register_tree_actions(self):
         mocked_ar = ActionRegistererMock()
         TreeController(None, mocked_ar, None, None).register_tree_actions()
-        self.assertEquals(
+        self.assertEqual(
             ["Go &Back", "Go &Forward"],
             [a.name for a in mocked_ar.action_collections])
 
@@ -60,7 +60,7 @@ class TestNavigationHistory(_BaseTreeControllerTest, unittest.TestCase):
 
     def test_go_back_one_level(self):
         self._select_node('Top Suite Fake UK 2')
-        self.assertEquals('Top Suite', self._go_back_and_return_selection())
+        self.assertEqual('Top Suite', self._go_back_and_return_selection())
 
     def test_go_back_two_levels(self):
         nodes = ['Top Suite Fake UK 1', 'Sub Suite 1', 'Sub Suite 1 Fake UK 0']
@@ -68,7 +68,7 @@ class TestNavigationHistory(_BaseTreeControllerTest, unittest.TestCase):
             self._select_node(name)
         nodes.reverse()
         for name in nodes[1:]:
-            self.assertEquals(name, self._go_back_and_return_selection())
+            self.assertEqual(name, self._go_back_and_return_selection())
 
     def test_it_is_not_possible_to_go_back_farther_than_history(self):
         nodes = ['Top Suite Fake UK 1', 'Sub Suite 1', 'Sub Suite 1 Fake UK 0']

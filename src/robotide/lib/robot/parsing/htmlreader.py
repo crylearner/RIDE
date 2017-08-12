@@ -12,11 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from HTMLParser import HTMLParser
-from htmlentitydefs import entitydefs
+from html.parser import HTMLParser
+from html.entities import entitydefs
 
 
-NON_BREAKING_SPACE = u'\xA0'
+NON_BREAKING_SPACE = '\xA0'
 
 
 class HtmlReader(HTMLParser):
@@ -83,7 +83,7 @@ class HtmlReader(HTMLParser):
         except KeyError:
             return '&'+name+';'
         if value.startswith('&#'):
-            return unichr(int(value[2:-1]))
+            return chr(int(value[2:-1]))
         return value.decode('ISO-8859-1')
 
     def handle_charref(self, number):
@@ -97,7 +97,7 @@ class HtmlReader(HTMLParser):
         else:
             base = 10
         try:
-            return unichr(int(number, base))
+            return chr(int(number, base))
         except ValueError:
             return '&#'+number+';'
 

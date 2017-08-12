@@ -16,7 +16,7 @@ import re
 import time
 import token
 from tokenize import generate_tokens, untokenize
-from StringIO import StringIO
+from io import StringIO
 
 from robotide.lib.robot.api import logger
 from robotide.lib.robot.errors import (ContinueForLoop, DataError, ExecutionFailed,
@@ -332,7 +332,7 @@ class _Converter(_BuiltInBase):
         return bool(item)
 
     def convert_to_bytes(self, input, input_type='text'):
-        u"""Converts the given ``input`` to bytes according to the ``input_type``.
+        """Converts the given ``input`` to bytes according to the ``input_type``.
 
         Valid input types are listed below:
 
@@ -420,7 +420,7 @@ class _Converter(_BuiltInBase):
         input = ''.join(input.split())
         if len(input) % length != 0:
             raise RuntimeError('Expected input to be multiple of %d.' % length)
-        return (input[i:i+length] for i in xrange(0, len(input), length))
+        return (input[i:i+length] for i in range(0, len(input), length))
 
     def create_list(self, *items):
         """Returns a list containing given items.
@@ -728,7 +728,7 @@ class _Verify(_BuiltInBase):
         error message with ``msg`` and ``values``.
         """
         self._log_types(first, second)
-        first, second = [self._convert_to_string(i) for i in first, second]
+        first, second = [self._convert_to_string(i) for i in (first, second)]
         self._should_not_be_equal(first, second, msg, values)
 
     def should_be_equal_as_strings(self, first, second, msg=None, values=True):
@@ -738,7 +738,7 @@ class _Verify(_BuiltInBase):
         error message with ``msg`` and ``values``.
         """
         self._log_types(first, second)
-        first, second = [self._convert_to_string(i) for i in first, second]
+        first, second = [self._convert_to_string(i) for i in (first, second)]
         self._should_be_equal(first, second, msg, values)
 
     def should_not_start_with(self, str1, str2, msg=None, values=True):
@@ -1531,7 +1531,7 @@ class _RunKeyword(_BuiltInBase):
         except ExecutionFailed as err:
             if err.dont_continue:
                 raise
-            return 'FAIL', unicode(err)
+            return 'FAIL', str(err)
 
     def run_keyword_and_return_status(self, name, *args):
         """Runs the given keyword with given arguments and returns the status as a Boolean value.
@@ -1605,10 +1605,10 @@ class _RunKeyword(_BuiltInBase):
         else:
             raise AssertionError("Expected error '%s' did not occur."
                                  % expected_error)
-        if not self._matches(unicode(err), expected_error):
+        if not self._matches(str(err), expected_error):
             raise AssertionError("Expected error '%s' but got '%s'."
                                  % (expected_error, err))
-        return unicode(err)
+        return str(err)
 
     def repeat_keyword(self, times, name, *args):
         """Executes the specified keyword multiple times.
@@ -1644,7 +1644,7 @@ class _RunKeyword(_BuiltInBase):
     def _yield_repeated_keywords(self, times, name, args):
         if times <= 0:
             self.log("Keyword '%s' repeated zero times." % name)
-        for i in xrange(times):
+        for i in range(times):
             self.log("Repeating keyword, round %d/%d." % (i+1, times))
             yield name, args
 
@@ -2217,7 +2217,7 @@ class _Misc(_BuiltInBase):
         return sep.join(items)
 
     def log(self, message, level='INFO', html=False, console=False, repr=False):
-        u"""Logs the given message with the given level.
+        """Logs the given message with the given level.
 
         Valid levels are TRACE, DEBUG, INFO (default), HTML, WARN, and ERROR.
         Messages below the current active log level are ignored. See
@@ -2303,7 +2303,7 @@ class _Misc(_BuiltInBase):
                 for item in value:
                     yield item
             elif var.is_dict_variable():
-                for name, value in value.items():
+                for name, value in list(value.items()):
                     yield '%s=%s' % (name, value)
             else:
                 yield value
@@ -2357,7 +2357,7 @@ class _Misc(_BuiltInBase):
         try:
             old = self._context.output.set_log_level(level)
         except DataError as err:
-            raise RuntimeError(unicode(err))
+            raise RuntimeError(str(err))
         self._namespace.variables.set_global('${LOG_LEVEL}', level.upper())
         self.log('Log level changed from %s to %s' % (old, level.upper()))
         return old
@@ -2405,7 +2405,7 @@ class _Misc(_BuiltInBase):
         try:
             self._namespace.import_library(name, list(args))
         except DataError as err:
-            raise RuntimeError(unicode(err))
+            raise RuntimeError(str(err))
 
     @run_keyword_variant(resolve=0)
     def import_variables(self, path, *args):
@@ -2427,7 +2427,7 @@ class _Misc(_BuiltInBase):
         try:
             self._namespace.import_variables(path, list(args), overwrite=True)
         except DataError as err:
-            raise RuntimeError(unicode(err))
+            raise RuntimeError(str(err))
 
     @run_keyword_variant(resolve=0)
     def import_resource(self, path):
@@ -2447,7 +2447,7 @@ class _Misc(_BuiltInBase):
         try:
             self._namespace.import_resource(path)
         except DataError as err:
-            raise RuntimeError(unicode(err))
+            raise RuntimeError(str(err))
 
     def set_library_search_order(self, *search_order):
         """Sets the resolution order to use when a name matches multiple keywords.
@@ -2506,7 +2506,7 @@ class _Misc(_BuiltInBase):
             if isinstance(handler, UserErrorHandler):
                 handler.run()
         except DataError as err:
-            raise AssertionError(msg or unicode(err))
+            raise AssertionError(msg or str(err))
 
     def get_time(self, format='timestamp', time_='NOW'):
         """Returns the given time in the requested format.
@@ -2673,7 +2673,7 @@ class _Misc(_BuiltInBase):
 
     def _decorate_variables_for_evaluation(self, variables):
         decorated = [('RF_VAR_' + name, value)
-                     for name, value in variables.items()]
+                     for name, value in list(variables.items())]
         return NormalizedDict(decorated, ignore='_')
 
     def call_method(self, object, method_name, *args, **kwargs):
@@ -2921,7 +2921,7 @@ class _Misc(_BuiltInBase):
         try:
             return self._namespace.get_library_instance(name)
         except DataError as err:
-            raise RuntimeError(unicode(err))
+            raise RuntimeError(str(err))
 
 
 class BuiltIn(_Verify, _Converter, _Variables, _RunKeyword, _Control, _Misc):

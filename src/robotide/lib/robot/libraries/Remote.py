@@ -12,14 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import httplib
+import http.client
 import re
 import socket
 import sys
 import time
-import xmlrpclib
+import xmlrpc.client
 try:
-    from xml.parsers.expat import ExpatError
+    from .xml.parsers.expat import ExpatError
 except ImportError:   # No expat in IronPython 2.7
     class ExpatError(Exception):
         pass
@@ -123,7 +123,7 @@ class ArgumentCoercer(object):
             arg = str(arg)
         except UnicodeError:
             raise ValueError('Cannot represent %r as binary.' % arg)
-        return xmlrpclib.Binary(arg)
+        return xmlrpc.client.Binary(arg)
 
     def _pass_through(self, arg):
         return arg
@@ -170,10 +170,10 @@ class RemoteResult(object):
         return self._convert(value)
 
     def _convert(self, value):
-        if isinstance(value, xmlrpclib.Binary):
+        if isinstance(value, xmlrpc.client.Binary):
             return str(value)
         if is_dict_like(value):
-            return DotDict((k, self._convert(v)) for k, v in value.items())
+            return DotDict((k, self._convert(v)) for k, v in list(value.items()))
         if is_list_like(value):
             return [self._convert(v) for v in value]
         return value
@@ -183,32 +183,32 @@ class XmlRpcRemoteClient(object):
 
     def __init__(self, uri, timeout=None):
         transport = TimeoutTransport(timeout=timeout)
-        self._server = xmlrpclib.ServerProxy(uri, encoding='UTF-8',
+        self._server = xmlrpc.client.ServerProxy(uri, encoding='UTF-8',
                                              transport=transport)
 
     def get_keyword_names(self):
         try:
             return self._server.get_keyword_names()
-        except (socket.error, xmlrpclib.Error) as err:
+        except (socket.error, xmlrpc.client.Error) as err:
             raise TypeError(err)
 
     def get_keyword_arguments(self, name):
         try:
             return self._server.get_keyword_arguments(name)
-        except xmlrpclib.Error:
+        except xmlrpc.client.Error:
             raise TypeError
 
     def get_keyword_documentation(self, name):
         try:
             return self._server.get_keyword_documentation(name)
-        except xmlrpclib.Error:
+        except xmlrpc.client.Error:
             raise TypeError
 
     def run_keyword(self, name, args, kwargs):
         run_keyword_args = [name, args, kwargs] if kwargs else [name, args]
         try:
             return self._server.run_keyword(*run_keyword_args)
-        except xmlrpclib.Fault as err:
+        except xmlrpc.client.Fault as err:
             message = err.faultString
         except socket.error as err:
             message = 'Connection to remote server broken: %s' % err
@@ -224,10 +224,10 @@ class XmlRpcRemoteClient(object):
 # http://stackoverflow.com/questions/2425799/timeout-for-xmlrpclib-client-requests
 
 
-class TimeoutTransport(xmlrpclib.Transport):
+class TimeoutTransport(xmlrpc.client.Transport):
 
     def __init__(self, use_datetime=0, timeout=None):
-        xmlrpclib.Transport.__init__(self, use_datetime)
+        xmlrpc.client.Transport.__init__(self, use_datetime)
         if not timeout:
             timeout = socket._GLOBAL_DEFAULT_TIMEOUT
         self.timeout = timeout
@@ -236,7 +236,7 @@ class TimeoutTransport(xmlrpclib.Transport):
         if self._connection and host == self._connection[0]:
             return self._connection[1]
         chost, self._extra_headers, x509 = self.get_host_info(host)
-        self._connection = host, httplib.HTTPConnection(chost, timeout=self.timeout)
+        self._connection = host, http.client.HTTPConnection(chost, timeout=self.timeout)
         return self._connection[1]
 
 
@@ -248,7 +248,7 @@ if sys.version_info[:2] == (2, 6):
             host, extra_headers, x509 = self.get_host_info(host)
             return TimeoutHTTP(host, timeout=self.timeout)
 
-    class TimeoutHTTP(httplib.HTTP):
+    class TimeoutHTTP(http.client.HTTP):
 
         def __init__(self, host='', port=None, strict=None, timeout=None):
             if port == 0:
@@ -258,9 +258,9 @@ if sys.version_info[:2] == (2, 6):
 
 if IRONPYTHON:
 
-    class TimeoutTransport(xmlrpclib.Transport):
+    class TimeoutTransport(xmlrpc.client.Transport):
 
         def __init__(self, use_datetime=0, timeout=None):
-            xmlrpclib.Transport.__init__(self, use_datetime)
+            xmlrpc.client.Transport.__init__(self, use_datetime)
             if timeout:
                 raise RuntimeError('Timeouts are not supported on IronPython.')

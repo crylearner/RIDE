@@ -29,7 +29,7 @@ class _NamePatterns(object):
     def _match_longname(self, name):
         raise NotImplementedError
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._matcher)
 
     def __iter__(self):

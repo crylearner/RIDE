@@ -130,7 +130,7 @@ class ConnectionCache(object):
     def __len__(self):
         return len(self._connections)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.current is not self._no_current
 
     def _resolve_alias_or_index(self, alias_or_index):
@@ -170,5 +170,5 @@ class NoConnection(object):
     def raise_error(self):
         raise RuntimeError(self.message)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return False

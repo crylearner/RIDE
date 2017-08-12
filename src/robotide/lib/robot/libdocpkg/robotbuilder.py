@@ -95,7 +95,7 @@ class KeywordDocBuilder(object):
 
     def _get_args(self, argspec):
         required = argspec.positional[:argspec.minargs]
-        defaults = zip(argspec.positional[argspec.minargs:], argspec.defaults)
+        defaults = list(zip(argspec.positional[argspec.minargs:], argspec.defaults))
         args = required + ['%s=%s' % item for item in defaults]
         if argspec.varargs:
             args.append('*%s' % argspec.varargs)

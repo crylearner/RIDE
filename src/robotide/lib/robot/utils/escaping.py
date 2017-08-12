@@ -105,7 +105,7 @@ class Unescaper(object):
         # unichr only supports ordinals up to 0xFFFF with narrow Python builds
         if ordinal > 0xFFFF:
             return eval("u'\\U%08x'" % ordinal)
-        return unichr(ordinal)
+        return chr(ordinal)
 
 
 class EscapeFinder(object):

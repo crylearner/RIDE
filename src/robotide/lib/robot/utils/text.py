@@ -84,7 +84,7 @@ def _dict_to_str(d):
     if not d:
         return '{ }'
     return '{ %s }' % ' | '.join('%s=%s' % (unic(k), unic(v))
-                                 for k, v in d.items())
+                                 for k, v in list(d.items()))
 
 
 def get_console_length(text):

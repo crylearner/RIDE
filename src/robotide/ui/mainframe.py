@@ -347,7 +347,7 @@ class ActionRegisterer(object):
     def register_tools(self):
         separator_action = ActionFactory(SeparatorInfo("Tools"))
         add_separator_after = ["stop test run","search unused keywords","preview","view ride log"]
-        for key in sorted(self._tools_items.iterkeys()):
+        for key in sorted(self._tools_items.keys()):
             self._menubar.register(self._tools_items[key])
             if self._tools_items[key].name.lower() in add_separator_after:
                 self._menubar.register(separator_action)

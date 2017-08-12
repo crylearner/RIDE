@@ -28,7 +28,7 @@ from . import messagetype
 from . import publisher
 
 
-class RideMessage(object):
+class RideMessage(object, metaclass=messagetype.messagetype):
     """Base class for all messages sent by RIDE.
 
     :CVariables:
@@ -42,7 +42,6 @@ class RideMessage(object):
         Names of attributes this message provides. These must be given as
         keyword arguments to `__init__` when an instance is created.
     """
-    __metaclass__ = messagetype.messagetype
     topic = None
     data = []
 
@@ -70,7 +69,7 @@ class RideMessage(object):
         """
         try:
             self._publish(self)
-        except Exception, err:
+        except Exception as err:
             self._publish(RideLogException(message='Error in publishing message: ' + str(err),
                                            exception=err, level='ERROR'))
 
@@ -127,7 +126,7 @@ class RideLogException(RideLog):
         if exc_traceback:
             tb = traceback.extract_tb(exc_traceback)
             message += '\n\nTraceback (most recent call last):\n%s\n%s' % \
-                (unicode(exception), ''.join(traceback.format_list(tb)))
+                (str(exception), ''.join(traceback.format_list(tb)))
         RideMessage.__init__(
             self, message=message, level=level, notify_user=False,
             timestamp=utils.get_timestamp(), exception=exception)
@@ -414,5 +413,5 @@ class RideOpenTagSearch(RideMessage):
     """ Sent we when want to open Search Tags)"""
     data = ['includes','excludes']
 
-__all__ = [ name for name, cls in globals().items()
+__all__ = [ name for name, cls in list(globals().items())
             if inspect.isclass(cls) and issubclass(cls, RideMessage) ]

@@ -47,15 +47,15 @@ except ImportError as e:
        sys.platform == 'darwin':
         print("python should be executed in 32-bit mode with wxPython on OSX.")
     else:
-        print(errorMessageTemplate.substitute(reason="wxPython not found."))
+        print((errorMessageTemplate.substitute(reason="wxPython not found.")))
     sys.exit(1)
 except VersionError:
-    print(errorMessageTemplate.substitute(reason="Wrong wxPython version."))
+    print((errorMessageTemplate.substitute(reason="Wrong wxPython version.")))
     sys.exit(1)
 
 if "ansi" in wx.PlatformInfo:
-    print(errorMessageTemplate.substitute(reason="wxPython with ansi encoding \
-is not supported"))
+    print((errorMessageTemplate.substitute(reason="wxPython with ansi encoding \
+is not supported")))
     sys.exit(1)
 
 
@@ -94,7 +94,7 @@ def _run(inpath=None, updatecheck=True, debug_console=False):
         _show_old_wxpython_warning_if_needed()
         raise
     if inpath:
-        inpath = unicode(inpath, sys.getfilesystemencoding())
+        inpath = str(inpath, sys.getfilesystemencoding())
     ride = RIDE(inpath, updatecheck)
     _show_old_wxpython_warning_if_needed(ride.frame)
     if debug_console:

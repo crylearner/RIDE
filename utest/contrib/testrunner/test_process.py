@@ -10,10 +10,10 @@ class ProcessUnicodeTestCase(unittest.TestCase):
 
     def test_unicode_command(self):
         try:
-            Process(u'\xf6').run_command(u'echo \xf6')
+            Process('\xf6').run_command('echo \xf6')
         except UnicodeEncodeError:
             self.fail('Should not throw unicode error')
-        except OSError, expected:
+        except OSError as expected:
             pass
 
     def test_running_pybot_test(self):
@@ -36,7 +36,7 @@ class ProcessUnicodeTestCase(unittest.TestCase):
         '2 critical tests, 1 passed, 1 failed\n2 tests total, 1 passed, 1 failed\n'
         '==============================================================================\n'),
         msg=repr(output))
-        self.assertEquals(errors.replace('\r', ''), u'[ WARN ] this passes\n')
+        self.assertEqual(errors.replace('\r', ''), '[ WARN ] this passes\n')
 
     def _run_small_test(self):
         p = Process(datafilereader.SMALL_TEST_PATH)

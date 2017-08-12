@@ -15,7 +15,7 @@
 import os
 import os.path
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from robotide.lib.robot.errors import DataError
 
@@ -64,7 +64,7 @@ def abspath(path, case_normalize=False):
     path = normpath(path, case_normalize)
     if os.path.isabs(path):
         return path
-    return normpath(os.path.join(os.getcwdu(), path), case_normalize)
+    return normpath(os.path.join(os.getcwd(), path), case_normalize)
 
 
 # TODO: Investigate could this be replaced with os.path.relpath in RF 2.9.
@@ -77,7 +77,7 @@ def get_link_path(target, base):
     Rationale: os.path.relpath is not available before Python 2.6
     """
     path =  _get_pathname(target, base)
-    url = urllib.pathname2url(path.encode('UTF-8'))
+    url = urllib.request.pathname2url(path.encode('UTF-8'))
     if os.path.isabs(path):
         url = 'file:' + url
     # At least Jython seems to use 'C|/Path' and not 'C:/Path'

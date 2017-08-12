@@ -4,8 +4,8 @@ from os.path import join, exists
 import re
 import shutil
 import tempfile
-from StringIO import StringIO
-import urllib2
+from io import StringIO
+import urllib.request, urllib.error, urllib.parse
 
 from invoke import task, run
 
@@ -21,7 +21,7 @@ BUNDLED_ROBOT_DIR = join(ROBOTIDE_PACKAGE, 'lib', 'robot')
 TEST_PROJECT_DIR = 'theproject'
 TEST_LIBS_GENERATED = 10
 # Set VERSION global variable
-execfile('src/robotide/version.py')
+exec(compile(open('src/robotide/version.py').read(), 'src/robotide/version.py', 'exec'))
 FINAL_RELEASE = bool(re.match('^(\d*\.){1,2}\d*$', VERSION))
 wxPythonDownloadUrl = \
     "http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/"
@@ -110,7 +110,7 @@ def generate_big_project(install=False, upgrade=False, args=''):
             "https://raw.github.com/robotframework/Generator/master/rfgen.py"
         _log("Installing/upgrading rfgen.py from github.")
         f = open('rfgen.py', 'wb')
-        f.write(urllib2.urlopen(rfgen_url).read())
+        f.write(urllib.request.urlopen(rfgen_url).read())
         f.close()
         _log("Done.")
 
@@ -233,7 +233,7 @@ def _remove_bytecode_files():
 
 def _remove_files_matching(directory, pattern):
     for root, dirs, files in os.walk(directory):
-        for file in filter(lambda x: re.match(pattern, x), files):
+        for file in [x for x in files if re.match(pattern, x)]:
             os.remove(join(root, file))
 
 
@@ -287,7 +287,7 @@ def _get_issues():
     import getpass
     from github3 import login
     milestone = re.split('[ab-]', VERSION)[0]
-    username = raw_input('Enter GitHub username for downloading issues: ')
+    username = eval(input('Enter GitHub username for downloading issues: '))
     password = getpass.getpass(
         'Github password for {user}: '.format(user=username))
     gh = login(username, password=password)
@@ -333,4 +333,4 @@ def _get_milestone(repo, milestone_title):
 
 
 def _log(msg):
-    print msg
+    print(msg)

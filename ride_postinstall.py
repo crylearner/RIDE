@@ -1,19 +1,19 @@
 import sys
 from os.path import exists, join
-from Tkinter import Tk
-from tkMessageBox import askyesno
+from tkinter import Tk
+from tkinter.messagebox import askyesno
 
 
 def verify_install():
     try:
         import wxversion
     except ImportError:
-        print "No wxPython installation detected!"
-        print ""
-        print "Please ensure that you have wxPython installed before running RIDE."
-        print "You can obtain wxPython 2.8.12.1 from http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/"
+        print("No wxPython installation detected!")
+        print("")
+        print("Please ensure that you have wxPython installed before running RIDE.")
+        print("You can obtain wxPython 2.8.12.1 from http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/")
     else:
-        print "Installation successful."
+        print("Installation successful.")
 
 
 def create_desktop_shortcut():

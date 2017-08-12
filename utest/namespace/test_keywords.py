@@ -8,7 +8,7 @@ class ItemMock(object):
     def __init__(self, name, args, long):
         self.name = name
         self.arguments = args
-        self.longname = long
+        self.longname = int
 
 
 class TestKeywords(unittest.TestCase):

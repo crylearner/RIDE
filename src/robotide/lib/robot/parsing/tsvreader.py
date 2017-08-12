@@ -15,7 +15,7 @@
 from robotide.lib.robot.utils import Utf8Reader
 
 
-NBSP = u'\xA0'
+NBSP = '\xA0'
 
 
 class TsvReader(object):

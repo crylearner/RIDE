@@ -130,7 +130,7 @@ class _GridClipboard(object):
     def _format_data(self, data):
         if isinstance(data, list):
             return os.linesep.join('\t'.join(row) for row in data)
-        if isinstance(data, basestring):
+        if isinstance(data, str):
             return data
         return None
 

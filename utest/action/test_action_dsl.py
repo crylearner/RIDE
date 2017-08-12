@@ -34,7 +34,7 @@ class TestActionInfoCollection(unittest.TestCase):
         assert_equals(infos[0].name, 'Save')
         assert_equals(infos[0].action, 'save action')
         assert_equals(infos[0].shortcut.value, 'Ctrl-S')
-        _check_mac(infos[0].shortcut.printable, u'Ctrl-S', u'\u2303S')
+        _check_mac(infos[0].shortcut.printable, 'Ctrl-S', '\\u2303S')
 
         assert_equals(infos[1].menu_name, 'File')
         assert_equals(infos[1].name, 'Huba')
@@ -48,7 +48,7 @@ class TestActionInfoCollection(unittest.TestCase):
         handlers = HandlerMock(OnHuba='huba action')
         infos = ActionInfoCollection(data, handlers)
         assert_equals(infos[0].menu_name, 'Hopla')
-        _check_mac(infos[0].name, u'Huba  (Alt-D or Ctrl-H)', u'Huba  (\u2325D or \u2318H)')
+        _check_mac(infos[0].name, 'Huba  (Alt-D or Ctrl-H)', 'Huba  (\\u2325D or \\u2318H)')
         assert_equals(infos[0].action, 'huba action')
         assert_equals(infos[0].shortcut.value, None)
 

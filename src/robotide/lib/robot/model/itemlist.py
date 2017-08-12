@@ -79,7 +79,7 @@ class ItemList(object):
         return len(self._items)
 
     def __unicode__(self):
-        return u'[%s]' % ', '.join(unicode(item) for item in self)
+        return '[%s]' % ', '.join(str(item) for item in self)
 
     def __str__(self):
-        return unicode(self).encode('ASCII', 'replace')
+        return str(self).encode('ASCII', 'replace')

@@ -14,7 +14,7 @@
 
 from robotide.lib.robot import model, utils
 
-from keyword import Keyword
+from .keyword import Keyword
 
 
 class TestCase(model.TestCase):

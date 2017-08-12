@@ -76,7 +76,7 @@ class VariableInfo(ItemInfo):
         self._value = value
 
     def _source_name(self, source):
-        return unicode(os.path.basename(source)) if source else ''
+        return str(os.path.basename(source)) if source else ''
 
     def name_matches(self, pattern):
         normalized = utils.normalize(self._undecorate(pattern))
@@ -108,7 +108,7 @@ class VariableInfo(ItemInfo):
                 '<tr><td><i>Name:</i></td><td>%s</td></tr>'
                 '<tr><td><i>Source:</i></td><td>%s</td></tr>'
                 '<tr><td valign=top><i>Value:</i></td><td>%s</td></tr>'
-                '</table>') % (self.name, self._original_source, unicode(value))
+                '</table>') % (self.name, self._original_source, str(value))
 
 
 class ArgumentInfo(VariableInfo):
@@ -230,7 +230,7 @@ class LibraryKeywordInfo(_KeywordInfo):
 class _UserKeywordInfo(_KeywordInfo):
 
     def _source(self, item):
-        return unicode(os.path.basename(item.source)) if item.source else ''
+        return str(os.path.basename(item.source)) if item.source else ''
 
     def _doc(self, item):
         return utils.unescape(item.doc.value)

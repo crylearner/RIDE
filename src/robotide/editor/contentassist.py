@@ -116,7 +116,7 @@ class _ContentAssistTextCtrlBase(object):
                 self.hide()
                 return False
             else:
-                value += unichr(event.GetRawKeyCode())
+                value += chr(event.GetRawKeyCode())
         (self.gherkin_prefix, value) = self._remove_bdd_prefix(value)
         return self._popup.content_assist_for(value, row=self._row)
 

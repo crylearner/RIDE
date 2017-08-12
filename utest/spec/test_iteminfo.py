@@ -48,7 +48,7 @@ class TestKeywordInfo(unittest.TestCase):
     def test_resource_uk_longname(self):
         uk = UserKeyword(KeywordTable(_FakeResourceFile()), 'UK')
         kw_info = ResourceUserKeywordInfo(uk)
-        self.assertEquals(kw_info.longname, 'resource.UK')
+        self.assertEqual(kw_info.longname, 'resource.UK')
 
 
 class TestVariableInfo(unittest.TestCase):

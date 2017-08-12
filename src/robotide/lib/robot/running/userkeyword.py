@@ -41,8 +41,8 @@ class UserLibrary(object):
                 self._validate_not_duplicate(handler)
             except DataError as err:
                 LOGGER.error("Creating user keyword '%s' failed: %s"
-                             % (kw.name, unicode(err)))
-                handler = UserErrorHandler(kw.name, unicode(err))
+                             % (kw.name, str(err)))
+                handler = UserErrorHandler(kw.name, str(err))
                 embedded = False
             self.handlers.add(handler, embedded)
 
@@ -70,7 +70,7 @@ class UserKeywordHandler(object):
         self.return_value = tuple(keyword.return_)
         self.teardown = keyword.keywords.teardown
         self.libname = libname
-        self.doc = self._doc = unicode(keyword.doc)
+        self.doc = self._doc = str(keyword.doc)
         self.tags = self._tags = keyword.tags
         self.arguments = UserKeywordArgumentParser().parse(tuple(keyword.args),
                                                            self.longname)
@@ -188,7 +188,7 @@ class UserKeywordHandler(object):
         try:
             name = context.variables.replace_string(self.teardown.name)
         except DataError as err:
-            return ExecutionFailed(unicode(err), syntax=True)
+            return ExecutionFailed(str(err), syntax=True)
         if name.upper() in ('', 'NONE'):
             return None
         runner = KeywordRunner(context)
@@ -214,7 +214,7 @@ class UserKeywordHandler(object):
             ret = variables.replace_list(ret)
         except DataError as err:
             raise DataError('Replacing variables from keyword return value '
-                            'failed: %s' % unicode(err))
+                            'failed: %s' % str(err))
         if len(ret) != 1 or contains_list_var:
             return ret
         return ret[0]
@@ -242,7 +242,7 @@ class EmbeddedArgs(UserKeywordHandler):
         if not match:
             raise ValueError('Does not match given name')
         UserKeywordHandler.__init__(self, template.keyword, template.libname)
-        self.embedded_args = zip(template.embedded_args, match.groups())
+        self.embedded_args = list(zip(template.embedded_args, match.groups()))
         self.name = name
         self.orig_name = template.name
 

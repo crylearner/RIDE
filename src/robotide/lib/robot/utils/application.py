@@ -46,15 +46,15 @@ class Application(object):
 
     def console(self, msg):
         if msg:
-            print encode_output(msg)
+            print((encode_output(msg)))
 
     def _parse_arguments(self, cli_args):
         try:
             options, arguments = self.parse_arguments(cli_args)
         except Information as msg:
-            self._report_info(unicode(msg))
+            self._report_info(str(msg))
         except DataError as err:
-            self._report_error(unicode(err), help=True, exit=True)
+            self._report_error(str(err), help=True, exit=True)
         else:
             self._logger.info('Arguments: %s' % ','.join(arguments))
             return options, arguments
@@ -78,7 +78,7 @@ class Application(object):
         try:
             rc = self.main(arguments, **options)
         except DataError as err:
-            return self._report_error(unicode(err), help=True)
+            return self._report_error(str(err), help=True)
         except (KeyboardInterrupt, SystemExit):
             return self._report_error('Execution stopped by user.',
                                       rc=STOPPED_BY_USER)
@@ -90,7 +90,7 @@ class Application(object):
             return rc or 0
 
     def _report_info(self, err):
-        self.console(unicode(err))
+        self.console(str(err))
         self._exit(INFO_PRINTED)
 
     def _report_error(self, message, details=None, help=False, rc=DATA_ERROR,
@@ -114,7 +114,7 @@ class DefaultLogger(object):
         pass
 
     def error(self, message):
-        print encode_output(message)
+        print((encode_output(message)))
 
     def close(self):
         pass

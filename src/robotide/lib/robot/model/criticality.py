@@ -35,5 +35,5 @@ class Criticality(object):
             return False
         return not self.non_critical_tags.match(test.tags)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.critical_tags or self.non_critical_tags)

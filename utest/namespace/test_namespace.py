@@ -69,7 +69,7 @@ def _add_variable_table(tcf):
     tcf.variable_table.add(UNRESOLVABLE_VARIABLE, UNKNOWN_VARIABLE)
     tcf.variable_table.add(COLLIDING_CONSTANT, 'collision')
     tcf.variable_table.add('&{dict var}', {'key': 'value'})
-    tcf.variable_table.add(u'${I <3 Unicode and \xe4iti}', u'123 \xe7')
+    tcf.variable_table.add('${I <3 Unicode and \xe4iti}', '123 \xe7')
 
 
 def _add_keyword_table(tcf):
@@ -379,7 +379,7 @@ class TestKeywordSearch(_DataFileTest):
                    for kw in all_kws if kw.name == "Only From Resource"]
         assert_equals(len(results), 1)
         assert_equals(
-            results[0], (u'Only From Resource', u'testdata_resource.txt'))
+            results[0], ('Only From Resource', 'testdata_resource.txt'))
 
     def test_find_user_keyword_name_normalized(self):
         assert_is_not_none(self.ns.find_user_keyword(

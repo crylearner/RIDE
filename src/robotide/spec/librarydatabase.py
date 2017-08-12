@@ -34,7 +34,7 @@ CREATE TABLE keywords (name TEXT,
 DATABASE_FILE = os.path.join(decode_from_system(SETTINGS_DIRECTORY), 'librarykeywords.db')
 
 def _create_database():
-    print 'Creating librarykeywords database to "%s"' % DATABASE_FILE
+    print(('Creating librarykeywords database to "%s"' % DATABASE_FILE))
 
     connection = sqlite3.connect(DATABASE_FILE)
     connection.executescript(CREATION_SCRIPT)
@@ -55,9 +55,9 @@ def initialize_database():
     else:
         try:
             _validate_database()
-        except sqlite3.DatabaseError, err:
-            print 'error during database validation "%s"' % err
-            print 'removing database "%s"' % DATABASE_FILE
+        except sqlite3.DatabaseError as err:
+            print(('error during database validation "%s"' % err))
+            print(('removing database "%s"' % DATABASE_FILE))
             os.remove(DATABASE_FILE)
             _create_database()
 
@@ -78,23 +78,23 @@ class LibraryDatabase(object):
 
     def insert_library_keywords(self, library_name, library_arguments, keywords):
         cur = self._cursor()
-        old_versions = cur.execute('select id from libraries where name = ? and arguments = ?', (library_name, unicode(library_arguments))).fetchall()
+        old_versions = cur.execute('select id from libraries where name = ? and arguments = ?', (library_name, str(library_arguments))).fetchall()
         cur.executemany('delete from keywords where library = ?', old_versions)
         cur.executemany('delete from libraries where id = ?', old_versions)
         lib = self._insert_library(library_name, library_arguments, cur)
-        keyword_values = [[kw.name, kw.doc, u' | '.join(kw.arguments), kw.source, lib[0]] for kw in keywords if kw is not None]
+        keyword_values = [[kw.name, kw.doc, ' | '.join(kw.arguments), kw.source, lib[0]] for kw in keywords if kw is not None]
         self._insert_library_keywords(keyword_values, cur)
         self._connection.commit()
 
     def update_library_timestamp(self, name, arguments, milliseconds=None):
-        self._cursor().execute('update libraries set last_updated = ? where name = ? and arguments = ?', (milliseconds or time.time(), name, unicode(arguments)))
+        self._cursor().execute('update libraries set last_updated = ? where name = ? and arguments = ?', (milliseconds or time.time(), name, str(arguments)))
         self._connection.commit()
 
     def fetch_library_keywords(self, library_name, library_arguments):
         lib = self._fetch_lib(library_name, library_arguments, self._cursor())
         if lib is None:
             return []
-        return [LibraryKeywordInfo(name, doc, library_name, arguments.split(u' | ') if arguments else [])
+        return [LibraryKeywordInfo(name, doc, library_name, arguments.split(' | ') if arguments else [])
                 for name, doc, arguments, library_name in
                 self._connection.execute('select name, doc, arguments, library_name from keywords where library = ?', [lib[0]])]
 
@@ -108,12 +108,12 @@ class LibraryDatabase(object):
         return lib[3]
 
     def _insert_library(self, name, arguments, cursor):
-        cursor.execute('insert into libraries values (null, ?, ?, ?)', (name, unicode(arguments), time.time()))
+        cursor.execute('insert into libraries values (null, ?, ?, ?)', (name, str(arguments), time.time()))
         return self._fetch_lib(name, arguments, cursor)
 
     def _fetch_lib(self, name, arguments, cursor):
-        t = cursor.execute('select max(last_updated) from libraries where name = ? and arguments = ?', (name, unicode(arguments))).fetchone()[0]
-        return cursor.execute('select * from libraries where name = ? and arguments = ? and last_updated = ?', (name, unicode(arguments), t)).fetchone()
+        t = cursor.execute('select max(last_updated) from libraries where name = ? and arguments = ?', (name, str(arguments))).fetchone()[0]
+        return cursor.execute('select * from libraries where name = ? and arguments = ? and last_updated = ?', (name, str(arguments), t)).fetchone()
 
     def _insert_library_keywords(self, data, cursor):
         cursor.executemany('insert into keywords values (?, ?, ?, ?, ?)', data)

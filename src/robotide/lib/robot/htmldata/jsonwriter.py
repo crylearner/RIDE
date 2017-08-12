@@ -72,7 +72,7 @@ class _Dumper(object):
 
 
 class StringDumper(_Dumper):
-    _handled_types = basestring
+    _handled_types = str
     _search_and_replace = [('\\', '\\\\'), ('"', '\\"'), ('\t', '\\t'),
                            ('\n', '\\n'), ('\r', '\\r'), ('</', '\\x3c/')]
 
@@ -87,7 +87,7 @@ class StringDumper(_Dumper):
 
 
 class IntegerDumper(_Dumper):
-    _handled_types = (int, long, bool)
+    _handled_types = (int, int, bool)
 
     def dump(self, data, mapping):
         self._write(str(data).lower())

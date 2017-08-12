@@ -20,7 +20,7 @@ from robotide.widgets import Dialog, HelpLabel
 
 
 _CONFIG_HELP = '\n\n'.join([ txt for txt in
-'''The specified command string will be split from whitespaces into a command
+('''The specified command string will be split from whitespaces into a command
 and its arguments. If either the command or any of the arguments require
 internal spaces, they must be written as '<SPACE>'.'''.replace('\n', ' '),
 '''The command will be executed in the system directly without opening a shell.
@@ -31,7 +31,7 @@ command does not work.'''.replace('\n', ' '),
     pybot.bat --include smoke C:\\my_tests
     svn update /home/robot
     C:\\Program<SPACE>Files\\App\\prg.exe argument<SPACE>with<SPACE>space''',
-'''Run configurations are stored in the RIDE settings file.'''
+'''Run configurations are stored in the RIDE settings file.''')
 ])
 
 

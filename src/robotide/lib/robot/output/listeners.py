@@ -32,7 +32,7 @@ class _RecursionAvoidingMetaclass(type):
     """
 
     def __new__(cls, name, bases, dct):
-        for attr, value in dct.items():
+        for attr, value in list(dct.items()):
             if not attr.startswith('_') and inspect.isroutine(value):
                 dct[attr] = cls._wrap_listener_method(value)
         dct['_calling_method'] = False
@@ -48,8 +48,7 @@ class _RecursionAvoidingMetaclass(type):
         return wrapped
 
 
-class Listeners(object):
-    __metaclass__ = _RecursionAvoidingMetaclass
+class Listeners(object, metaclass=_RecursionAvoidingMetaclass):
     _start_attrs = ('id', 'doc', 'starttime', 'longname')
     _end_attrs = _start_attrs + ('endtime', 'elapsedtime', 'status', 'message')
     _kw_extra_attrs = ('args', 'assign', 'kwname', 'libname',
@@ -60,7 +59,7 @@ class Listeners(object):
         self._running_test = False
         self._setup_or_teardown_type = None
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._listeners)
 
     def _import_listeners(self, listener_data):
@@ -72,7 +71,7 @@ class Listeners(object):
                 if not is_string(listener):
                     listener = type_name(listener)
                 LOGGER.error("Taking listener '%s' into use failed: %s"
-                             % (listener, unicode(err)))
+                             % (listener, str(err)))
         return listeners
 
     def start_suite(self, suite):

@@ -72,7 +72,7 @@ class Runner(SuiteVisitor):
             ns.variables.resolve_delayed()
         result.doc = self._resolve_setting(result.doc)
         result.metadata = [(self._resolve_setting(n), self._resolve_setting(v))
-                           for n, v in result.metadata.items()]
+                           for n, v in list(result.metadata.items())]
         self._context.set_suite_variables(result)
         self._output.start_suite(ModelCombiner(result, suite,
                                                tests=suite.tests,
@@ -92,7 +92,7 @@ class Runner(SuiteVisitor):
         with self._context.suite_teardown():
             failure = self._run_teardown(suite.keywords.teardown, self._suite_status)
             if failure:
-                self._suite.suite_teardown_failed(unicode(failure))
+                self._suite.suite_teardown_failed(str(failure))
                 if self._suite.statistics.critical.failed:
                     self._suite_status.critical_failure_occurred()
         self._suite.endtime = get_timestamp()
@@ -120,7 +120,7 @@ class Runner(SuiteVisitor):
             result.tags = self._context.variables.replace_list(result.tags)
         except DataError as err:
             status.test_failed('Replacing variables from test tags failed: %s'
-                               % unicode(err))
+                               % str(err))
         self._context.start_test(result)
         self._output.start_test(ModelCombiner(result, test))
         if status.exit:

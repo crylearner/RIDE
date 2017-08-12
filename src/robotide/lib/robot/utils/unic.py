@@ -22,10 +22,10 @@ from .robottypes import is_bytes, is_unicode
 def unic(item, *args):
     # Based on a recipe from http://code.activestate.com/recipes/466341
     try:
-        return unicode(item, *args)
+        return str(item, *args)
     except UnicodeError:
         try:
-            return u''.join(c if ord(c) < 128 else c.encode('string_escape')
+            return ''.join(c if ord(c) < 128 else c.encode('string_escape')
                             for c in str(item))
         except:
             return _unrepresentable_object(item)
@@ -63,5 +63,5 @@ class PrettyRepr(PrettyPrinter):
 
 def _unrepresentable_object(item):
     from .error import get_error_message
-    return u"<Unrepresentable object %s. Error: %s>" \
+    return "<Unrepresentable object %s. Error: %s>" \
            % (item.__class__.__name__, get_error_message())

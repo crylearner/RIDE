@@ -267,7 +267,7 @@ class _Table(object):
     def report_invalid_syntax(self, message, level='ERROR'):
         self.parent.report_invalid_syntax(message, level)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._header or len(self))
 
     def __len__(self):
@@ -438,7 +438,7 @@ class TestCaseTable(_Table):
     def is_started(self):
         return bool(self._header)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return True
 
 
@@ -487,7 +487,7 @@ class Variable(object):
     def has_data(self):
         return bool(self.name or ''.join(self.value))
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.has_data()
 
     def report_invalid_syntax(self, message, level='ERROR'):

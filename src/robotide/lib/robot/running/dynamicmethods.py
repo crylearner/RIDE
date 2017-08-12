@@ -66,7 +66,7 @@ class _DynamicMethod(object):
         except (TypeError, DataError):
             raise DataError('Return value must be list of strings.')
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.method is not no_dynamic_method
 
 
@@ -91,7 +91,7 @@ class RunKeyword(_DynamicMethod):
         return len(spec.positional) == 3
 
     def _supports_java_kwargs(self, method):
-        func = self.method.im_func if hasattr(method, 'im_func') else method
+        func = self.method.__func__ if hasattr(method, 'im_func') else method
         signatures = func.argslist[:func.nargs]
         spec = JavaArgumentParser().parse(signatures)
         return (self._java_single_signature_kwargs(spec) or

@@ -26,7 +26,7 @@ BUILTIN = BuiltIn()
 class deprecator(type):
     def __new__(cls, class_name, bases, dct):
         use_instead_library = class_name[len('Deprecated'):]
-        for name, func in dct.items():
+        for name, func in list(dct.items()):
             if cls._should_be_deprecated(name, func):
                 dct[name] = cls._deprecate(func, use_instead_library)
         return type.__new__(cls, class_name, bases, dct)
@@ -46,9 +46,7 @@ class deprecator(type):
         return deprecated
 
 
-class DeprecatedBuiltIn(object):
-    __metaclass__ = deprecator
-
+class DeprecatedBuiltIn(object, metaclass=deprecator):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     integer = BUILTIN.convert_to_integer

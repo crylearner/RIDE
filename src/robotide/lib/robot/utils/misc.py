@@ -98,7 +98,7 @@ def seq2str2(sequence):
 
 
 def getdoc(item):
-    doc = inspect.getdoc(item) or u''
+    doc = inspect.getdoc(item) or ''
     if is_unicode(doc):
         return doc
     try:

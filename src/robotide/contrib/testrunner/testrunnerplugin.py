@@ -46,7 +46,7 @@ import datetime
 import time
 import os
 import re
-from Queue import Queue
+from queue import Queue
 import wx
 import wx.stc
 from wx.lib.embeddedimage import PyEmbeddedImage
@@ -61,6 +61,7 @@ from robotide.pluginapi import Plugin, ActionInfo
 from robotide.widgets import Label, ImageProvider
 from robotide.robotapi import LOG_LEVELS
 from robotide.utils import robottime
+from functools import reduce
 
 
 ID_RUN = wx.NewId()
@@ -254,10 +255,10 @@ class TestRunnerPlugin(Plugin):
             self._process_timer.Start(41) # roughly 24fps
             self._set_running()
             self._progress_bar.Start()
-        except Exception, e:
+        except Exception as e:
             self._set_stopped()
             error, log_message = self.get_current_profile().format_error(
-                unicode(e), None)
+                str(e), None)
             self._output(error)
             if log_message:
                 log_message.publish()
@@ -430,7 +431,7 @@ class TestRunnerPlugin(Plugin):
         textctrl.SetReadOnly(False)
         try:
             textctrl.AppendText(string)
-        except UnicodeDecodeError,e:
+        except UnicodeDecodeError as e:
             # I'm not sure why I sometimes get this, and I don't know what I can
             # do other than to ignore it.
             pass

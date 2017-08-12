@@ -38,7 +38,7 @@ class FlattenByTypeMatcher(object):
     def match(self, kwtype):
         return kwtype in self._types
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._types)
 
 
@@ -54,7 +54,7 @@ class FlattenByNameMatcher(object):
         name = '%s.%s' % (libname, kwname) if libname else kwname
         return self._matcher.match(name)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._matcher)
 
 
@@ -69,5 +69,5 @@ class FlattenByTagMatcher(object):
     def match(self, kwtags):
         return self._matcher.match(kwtags)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self._matcher)

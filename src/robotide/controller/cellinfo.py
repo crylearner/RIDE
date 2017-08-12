@@ -60,7 +60,7 @@ def TipMessage(cell):
         return ''
     tip = _TooltipMessage(cell) if not cell.for_loop \
         else _ForLoopTooltipMessage(cell)
-    return html_escape(unicode(tip))
+    return html_escape(str(tip))
 
 
 class _TooltipMessage(object):
@@ -119,7 +119,7 @@ class _TooltipMessage(object):
     def _unknown(self, cell):
         return ''
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.message)
 
     def __str__(self):

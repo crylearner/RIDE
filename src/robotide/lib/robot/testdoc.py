@@ -86,7 +86,7 @@ import time
 # Allows running as a script. __name__ check needed with multiprocessing:
 # http://code.google.com/p/robotframework/issues/detail?id=1137
 if 'robot' not in sys.modules and __name__ == '__main__':
-    import pythonpathsetter
+    from . import pythonpathsetter
 
 from robotide.lib.robot.conf import RobotSettings
 from robotide.lib.robot.htmldata import HtmlFileWriter, ModelWriter, JsonWriter, TESTDOC
@@ -143,7 +143,7 @@ class TestdocModelWriter(ModelWriter):
             'suite': JsonConverter(self._output_path).convert(self._suite),
             'title': self._title,
             'generated': format_time(generated_time, gmtsep=' '),
-            'generatedMillis': long(time.mktime(generated_time) * 1000)
+            'generatedMillis': int(time.mktime(generated_time) * 1000)
         }
         JsonWriter(self._output).write_json('testdoc = ', model)
 
@@ -165,7 +165,7 @@ class JsonConverter(object):
             'fullName': self._escape(suite.longname),
             'doc': self._html(suite.doc),
             'metadata': [(self._escape(name), self._html(value))
-                         for name, value in suite.metadata.items()],
+                         for name, value in list(suite.metadata.items())],
             'numberOfTests': suite.test_count   ,
             'suites': self._convert_suites(suite),
             'tests': self._convert_tests(suite),

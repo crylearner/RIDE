@@ -19,9 +19,7 @@ from .OperatingSystem import OperatingSystem
 OS = OperatingSystem()
 
 
-class DeprecatedOperatingSystem(object):
-    __metaclass__ = deprecator
-
+class DeprecatedOperatingSystem(object, metaclass=deprecator):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     delete_environment_variable = OS.remove_environment_variable

@@ -17,7 +17,7 @@ from wx import grid
 
 from robotide.widgets import PopupCreator, PopupMenuItems
 from robotide.context import IS_WINDOWS
-from clipboard import ClipboardHandler
+from .clipboard import ClipboardHandler
 
 
 class GridEditor(grid.Grid):
@@ -71,8 +71,8 @@ class GridEditor(grid.Grid):
         self._history.change(self._get_all_content())
 
     def _get_all_content(self):
-        return self._get_block_content(range(self.NumberRows),
-                                       range(self.NumberCols))
+        return self._get_block_content(list(range(self.NumberRows)),
+                                       list(range(self.NumberCols)))
 
     @property
     def cell_under_cursor(self):
@@ -292,11 +292,11 @@ class _GridSelection(object):
 
     def rows(self):
         """Returns a list containing indices of rows currently selected."""
-        return range(self.topleft.row, self.bottomright.row + 1)
+        return list(range(self.topleft.row, self.bottomright.row + 1))
 
     def cols(self):
         """Returns a list containing indices of columns currently selected."""
-        return range(self.topleft.col, self.bottomright.col + 1)
+        return list(range(self.topleft.col, self.bottomright.col + 1))
 
     def cells(self):
         """Return selected cells as a list of tuples (row, column)."""

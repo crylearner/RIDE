@@ -67,12 +67,12 @@ class LibraryCache(object):
             library_database.close()
 
     def _key(self, name, args):
-        return name, unicode(tuple(args or ''))
+        return name, str(tuple(args or ''))
 
     def get_library_keywords(self, name, args=None, alias=None):
         args_with_alias = self._alias_to_args(alias, args)
         key = self._key(name, args_with_alias)
-        if not self._library_keywords.has_key(key):
+        if key not in self._library_keywords:
             self._library_keywords[key] = \
                 [k.with_alias(alias) for k in self._get_library(name, args)]
         return self._library_keywords[key]
@@ -90,7 +90,7 @@ class LibraryCache(object):
 
     def _build_default_kws(self):
         kws = []
-        for keywords_in_library in self._default_libraries.values():
+        for keywords_in_library in list(self._default_libraries.values()):
             kws.extend(keywords_in_library)
         return kws
 

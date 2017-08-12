@@ -388,7 +388,7 @@ class OperatingSystem(object):
         ``encoding_errors`` argument is new in Robot Framework 2.8.5.
         """
         content = self.get_binary_file(path)
-        return unicode(content, encoding, encoding_errors).replace('\r\n', '\n')
+        return str(content, encoding, encoding_errors).replace('\r\n', '\n')
 
     def get_binary_file(self, path):
         """Returns the contents of a specified file.
@@ -1135,7 +1135,7 @@ class OperatingSystem(object):
         New in Robot Framework 2.7.
         """
         vars = get_env_vars()
-        for name, value in sorted(vars.items(), key=lambda item: item[0].lower()):
+        for name, value in sorted(list(vars.items()), key=lambda item: item[0].lower()):
             self._log('%s = %s' % (name, value), level)
         return vars
 
@@ -1357,7 +1357,7 @@ class OperatingSystem(object):
             mtime = parse_time(mtime)
         except ValueError as err:
             raise RuntimeError("Setting modified time of '%s' failed: %s"
-                               % (path, unicode(err)))
+                               % (path, str(err)))
         os.utime(path, (mtime, mtime))
         time.sleep(0.1)  # Give os some time to really set these times
         tstamp = secs_to_timestamp(mtime, ('-',' ',':'))
@@ -1503,7 +1503,7 @@ class OperatingSystem(object):
         if logger:
             logger.write(msg, level)
         else:
-            print '*%s* %s' % (level, msg)
+            print(('*%s* %s' % (level, msg)))
 
 
 class _Process:

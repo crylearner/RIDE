@@ -373,7 +373,7 @@ class VariablesListEditor(_AbstractListEditor):
 
     def get_column_values(self, item):
         return [item.name, item.value
-                if isinstance(item.value, basestring)
+                if isinstance(item.value, str)
                 else ' | '.join(item.value),
                 ListToStringFormatter(item.comment).value]
 

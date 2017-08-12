@@ -113,12 +113,12 @@ http://robotframework.org/robotframework/#built-in-tools.
 
 import os
 import sys
-from StringIO import StringIO
+from io import StringIO
 
 # Allows running as a script. __name__ check needed with multiprocessing:
 # http://code.google.com/p/robotframework/issues/detail?id=1137
 if 'robot' not in sys.modules and __name__ == '__main__':
-    import pythonpathsetter
+    from . import pythonpathsetter
 
 from robotide.lib.robot.errors import DataError
 from robotide.lib.robot.parsing import (ResourceFile, TestDataDirectory, TestCaseFile,

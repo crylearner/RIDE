@@ -193,10 +193,10 @@ class TestSelectionController(object):
 
     def send_selection_changed_message(self):
         RideTestSelectedForRunningChanged(tests=set([(t.datafile_controller.longname, t.longname)
-                                                     for t in self._tests.values()])).publish()
+                                                     for t in list(self._tests.values())])).publish()
 
     def add_tag(self, name):
-        for test in self._tests.values():
+        for test in list(self._tests.values()):
             self._add_tag_to_test(name, test)
 
     def _add_tag_to_test(self, name, test):

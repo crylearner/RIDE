@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from time import time
-from StringIO import StringIO
+from io import StringIO
 import string
 import wx
 from wx import stc
@@ -581,7 +581,7 @@ class RobotStylizer(object):
     def _get_style_string(self, back='#FFFFFF', face='Courier', fore='#000000', bold='', underline=''):
         settings = locals()
         settings.update(size=self.font_size)
-        return ','.join('%s:%s' % (name, value) for name, value in settings.items() if value)
+        return ','.join('%s:%s' % (name, value) for name, value in list(settings.items()) if value)
 
     def stylize(self):
         if not self.lexer:

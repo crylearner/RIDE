@@ -105,7 +105,7 @@ def _first_occurrence(test_ctrl, kw_name):
     occurrences = test_ctrl.execute(FindOccurrences(kw_name))
     if not occurrences:
         raise AssertionError('No occurrences found for "%s"' % kw_name)
-    return occurrences.next()
+    return next(occurrences)
 
 
 def _get_ctrl_by_name(self, name, datafiles):
@@ -535,7 +535,7 @@ class RenameOccurrenceTest(unittest.TestCase):
         self._add_step('Given '+kw)
         self._rename(kw, UNUSED_KEYWORD_NAME, TEST1_NAME, 'Steps')
         self._expected_messages(steps_have_changed=True)
-        self.assertEquals(self.test_ctrl.step(100).as_list()[100],
+        self.assertEqual(self.test_ctrl.step(100).as_list()[100],
                           'Given '+UNUSED_KEYWORD_NAME)
 
     def test_rename_when_prefixed_keywords(self):
@@ -543,7 +543,7 @@ class RenameOccurrenceTest(unittest.TestCase):
         self._add_step('wHEn   '+kw)
         self._rename(kw, UNUSED_KEYWORD_NAME, TEST1_NAME, 'Steps')
         self._expected_messages(steps_have_changed=True)
-        self.assertEquals(self.test_ctrl.step(100).as_list()[100],
+        self.assertEqual(self.test_ctrl.step(100).as_list()[100],
                           'wHEn   '+UNUSED_KEYWORD_NAME)
 
     def test_rename_then_prefixed_keywords(self):
@@ -551,7 +551,7 @@ class RenameOccurrenceTest(unittest.TestCase):
         self._add_step('THen '+kw)
         self._rename(kw, UNUSED_KEYWORD_NAME, TEST1_NAME, 'Steps')
         self._expected_messages(steps_have_changed=True)
-        self.assertEquals(self.test_ctrl.step(100).as_list()[100],
+        self.assertEqual(self.test_ctrl.step(100).as_list()[100],
                           'THen '+UNUSED_KEYWORD_NAME)
 
     def test_rename_and_prefixed_keywords(self):
@@ -559,7 +559,7 @@ class RenameOccurrenceTest(unittest.TestCase):
         self._add_step('AND '+kw)
         self._rename(kw, UNUSED_KEYWORD_NAME, TEST1_NAME, 'Steps')
         self._expected_messages(steps_have_changed=True)
-        self.assertEquals(self.test_ctrl.step(100).as_list()[100],
+        self.assertEqual(self.test_ctrl.step(100).as_list()[100],
                           'AND '+UNUSED_KEYWORD_NAME)
 
     def test_rename_but_prefixed_keywords(self):
@@ -567,7 +567,7 @@ class RenameOccurrenceTest(unittest.TestCase):
         self._add_step('bUt '+kw)
         self._rename(kw, UNUSED_KEYWORD_NAME, TEST1_NAME, 'Steps')
         self._expected_messages(steps_have_changed=True)
-        self.assertEquals(self.test_ctrl.step(100).as_list()[100],
+        self.assertEqual(self.test_ctrl.step(100).as_list()[100],
                           'bUt '+UNUSED_KEYWORD_NAME)
 
     def test_rename_when_keyword_begins_with_prefix(self):
@@ -575,7 +575,7 @@ class RenameOccurrenceTest(unittest.TestCase):
         self._add_step(kw)
         self._rename(kw, UNUSED_KEYWORD_NAME, TEST1_NAME, 'Steps')
         self._expected_messages(steps_have_changed=True)
-        self.assertEquals(self.test_ctrl.step(100).as_list()[100],
+        self.assertEqual(self.test_ctrl.step(100).as_list()[100],
                           UNUSED_KEYWORD_NAME)
 
     def _add_step(self, keyword):

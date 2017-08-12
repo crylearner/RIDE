@@ -39,7 +39,7 @@ class HandlerStore(object):
         self._embedded = [e for e in self._embedded if not e.matches(name)]
 
     def __iter__(self):
-        return iter(sorted(self._normal.values() + self._embedded,
+        return iter(sorted(list(self._normal.values()) + self._embedded,
                            key=attrgetter('name')))
 
     def __len__(self):

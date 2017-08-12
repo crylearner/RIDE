@@ -84,7 +84,7 @@ class LogPlugin(Plugin):
         if self._window:
             self._window.update_log()
         if self.log_to_console:
-            print _message_to_string(log_event)
+            print((_message_to_string(log_event)))
         if self.log_to_file:
             self._logfile.write(_message_to_string(log_event))
         if log_event.notify_user:

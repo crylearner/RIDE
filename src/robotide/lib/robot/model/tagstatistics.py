@@ -37,7 +37,7 @@ class TagStatistics(object):
         visitor.visit_tag_statistics(self)
 
     def __iter__(self):
-        return iter(sorted(self.tags.values() + self.combined))
+        return iter(sorted(list(self.tags.values()) + self.combined))
 
 
 class TagStatisticsBuilder(object):

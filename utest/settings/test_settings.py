@@ -11,12 +11,12 @@ from resources.setting_utils import TestSettingsHelper
 class TestInvalidSettings(TestSettingsHelper):
 
     def test_no_settings_exists(self):
-        self.assertEquals(self.settings._config_obj, {})
+        self.assertEqual(self.settings._config_obj, {})
 
     def test_setting_name_with_space(self):
         self.settings['name with space'] = 0
         settings = Settings(self.user_settings_path)
-        self.assertEquals(settings['name with space'], 0)
+        self.assertEqual(settings['name with space'], 0)
 
     def test_invalid_settings(self):
         self._write_settings('invalid syntax = foo')
@@ -31,15 +31,15 @@ class TestSettingTypes(TestSettingsHelper):
 
     def test_writing_unicode_setting(self):
         self._test_settings_types(
-            {'unicode_string': u'non-ascii character \xe4'})
+            {'unicode_string': 'non-ascii character \xe4'})
 
     def test_writing_list_setting(self):
         self._test_settings_types(
-            {'unicode_string': [1, 'string', u'non-ascii character \xe4']})
+            {'unicode_string': [1, 'string', 'non-ascii character \xe4']})
 
     def test_writing_tuple_setting(self):
         self._test_settings_types(
-            {'unicode_string': (1, 'string', u'non-ascii character \xe4')})
+            {'unicode_string': (1, 'string', 'non-ascii character \xe4')})
 
     def test_writing_dictionary_setting(self):
         self._test_settings_types({'dictionary': {'a': 1, 'b': 2, 'c': 3}})
@@ -51,7 +51,7 @@ class TestSettingTypes(TestSettingsHelper):
         self._test_settings_types({'boolean': True})
 
     def test_writing_multiline_string_setting(self):
-        multiline = u"""Multi line string
+        multiline = """Multi line string
 with non-ascii chars \xe4
 and quotes "foo" 'bar'
 and even triple quotes \"\"\" '''
@@ -59,17 +59,17 @@ and even triple quotes \"\"\" '''
         self._test_settings_types({'multiline': multiline})
 
     def test_multiple_settings(self):
-        multiline = u"""Multi line string
+        multiline = """Multi line string
 with non-ascii chars \xe4
 and quotes "foo" 'bar'
 and even triple quotes \"\"\" '''
 """
         self._test_settings_types(
-            {'multiline': multiline, 'string': u'some', 'bool': False,
+            {'multiline': multiline, 'string': 'some', 'bool': False,
              'int': 1, 'float': 2.4})
 
     def _test_settings_types(self, expected):
-        for key, value in expected.items():
+        for key, value in list(expected.items()):
             self.settings[key] = value
         self.assertEqual(expected, self._read_settings()._config_obj)
 
@@ -83,7 +83,7 @@ class TestSettings(TestSettingsHelper):
 
     def test_getting_settings_with_getitem(self):
         self._create_settings_with_defaults()
-        self.assertEquals('bar', self.settings['foo'])
+        self.assertEqual('bar', self.settings['foo'])
 
     def _create_settings_with_defaults(self):
         self._write_settings(
@@ -106,7 +106,7 @@ class TestSettings(TestSettingsHelper):
         self.settings.set('foo', 'new value', autosave=False)
         self._check_content(self.default, check_self_settings=False)
         expected = {'foo': 'new value', 'hello': 'world'}
-        self.assertEquals(self.settings._config_obj, expected)
+        self.assertEqual(self.settings._config_obj, expected)
         self.settings.save()
         self._check_content(expected)
 
@@ -129,7 +129,7 @@ class TestSettings(TestSettingsHelper):
         self.settings.set_values(
             {'foo': 'new value', 'int': 1}, autosave=False)
         expected = {'foo': 'new value', 'hello': 'world', 'int': 1}
-        self.assertEquals(self.settings._config_obj, expected)
+        self.assertEqual(self.settings._config_obj, expected)
         self._check_content(self.default, check_self_settings=False)
         self.settings.save()
         self._check_content(expected)
@@ -192,30 +192,30 @@ class TestSettingsFileContent(TestSettingsHelper):
         settings['Section 1']['robot'] = 'New Robot'
         expected = SETTINGS_CONTENT.replace('REPLACE_STRING', 'new value')
         expected = expected.replace('REPLACE_ROBOT', 'New Robot')
-        self.assertEquals(self._read_settings_file_content(), expected)
+        self.assertEqual(self._read_settings_file_content(), expected)
 
 
 class TestSections(TestSettingsHelper):
 
     def test_add_section(self):
         self.settings.add_section('Plugin 1')
-        self.assertEquals(self.settings['Plugin 1']._config_obj, {})
+        self.assertEqual(self.settings['Plugin 1']._config_obj, {})
 
     def test_add_section_returns_section(self):
-        self.assertEquals(
+        self.assertEqual(
             self.settings.add_section('Plugin 1')._config_obj, {})
 
     def test_add_section_with_default_values(self):
         section = self.settings.add_section('Plugin 1', a='b', one='2')
-        self.assertEquals(section._config_obj, {'a': 'b', 'one': '2'})
-        self.assertEquals(self._read_settings()['Plugin 1']._config_obj,
+        self.assertEqual(section._config_obj, {'a': 'b', 'one': '2'})
+        self.assertEqual(self._read_settings()['Plugin 1']._config_obj,
                           {'a': 'b', 'one': '2'})
 
     def test_add_section_should_not_fail_if_section_already_exists(self):
         self.settings.add_section('Plugin 1')
         self.settings.add_section('Plugin 1')
         self.settings['Plugin 1']['foo'] = 'bar'
-        self.assertEquals(self.settings.add_section('Plugin 1')._config_obj,
+        self.assertEqual(self.settings.add_section('Plugin 1')._config_obj,
                           {'foo': 'bar'})
 
     def test_add_section_should_fail_if_item_with_same_name_already_exists(
@@ -231,8 +231,8 @@ class TestSections(TestSettingsHelper):
         self.settings.add_section('Plugin 1', foo='bar', hello='world')
         section = self.settings.add_section('Plugin 2', zip=2)
         self.settings.set('Plugin 1', section)
-        self.assertEquals(self.settings['Plugin 1']._config_obj, {'zip': 2})
-        self.assertEquals(
+        self.assertEqual(self.settings['Plugin 1']._config_obj, {'zip': 2})
+        self.assertEqual(
             self._read_settings()['Plugin 1']._config_obj, {'zip': 2})
 
     def test_set_updating_section_with_other_section(self):
@@ -241,21 +241,21 @@ class TestSections(TestSettingsHelper):
             'Plugin 2', foo='new value', zip=2)
         self.settings.set('Plugin 1', section, override=False)
         expected = {'foo': 'bar', 'hello': 'world', 'zip': 2}
-        self.assertEquals(self.settings['Plugin 1']._config_obj, expected)
-        self.assertEquals(
+        self.assertEqual(self.settings['Plugin 1']._config_obj, expected)
+        self.assertEqual(
             self._read_settings()['Plugin 1']._config_obj, expected)
 
     def test_add_sub_section(self):
         self.settings.add_section('Plugin 1')
         self.settings['Plugin 1'].add_section('Plugin 1.1')
-        self.assertEquals(
+        self.assertEqual(
             self.settings['Plugin 1']['Plugin 1.1']._config_obj, {})
 
     def test_add_settings_to_sub_section(self):
         self.settings.add_section('Plugin 1')
         self.settings['Plugin 1'].add_section('Plugin 1.1')
         self.settings['Plugin 1']['Plugin 1.1']['foo'] = 'bar'
-        self.assertEquals(self.settings['Plugin 1']['Plugin 1.1']._config_obj,
+        self.assertEqual(self.settings['Plugin 1']['Plugin 1.1']._config_obj,
                           {'foo': 'bar'})
 
     def test_using_section_separately_and_saving(self):
@@ -263,14 +263,14 @@ class TestSections(TestSettingsHelper):
         plugin_settings = self.settings['Plugin 1']
         plugin_settings['foo'] = 'bar'
         plugin_settings.save()
-        self.assertEquals(self._read_settings()['Plugin 1']._config_obj,
+        self.assertEqual(self._read_settings()['Plugin 1']._config_obj,
                           {'foo': 'bar'})
 
     def test_set_values_to_section(self):
         defaults = {'foo': 'bar', 'hello': 'world'}
         self.settings.add_section('Plugin 1')
         self.settings['Plugin 1'].set_values(defaults)
-        self.assertEquals(
+        self.assertEqual(
             self._read_settings()['Plugin 1']._config_obj, defaults)
 
 
@@ -362,7 +362,7 @@ class TestMergeSettings(TestSettingsHelper):
     def test_merge_fails_reasonably_when_settings_file_is_read_only(self):
         try:
             SettingsMigrator(self.settings_path, self.read_only_path).merge()
-        except RuntimeError, e:
+        except RuntimeError as e:
             self.assertTrue(str(e).startswith('Could not open'))
         else:
             raise AssertionError('merging read-only file succeeded')

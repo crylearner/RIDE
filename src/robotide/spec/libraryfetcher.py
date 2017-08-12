@@ -35,7 +35,7 @@ def _parse_args(args):
     if args.defaults:
         for i, value in enumerate(args.defaults):
             index = len(args.positional) - len(args.defaults) + i
-            parsed[index] = parsed[index] + '=' + unicode(value)
+            parsed[index] = parsed[index] + '=' + str(value)
     if args.varargs:
         parsed.append('*%s' % args.varargs)
     if args.kwargs:

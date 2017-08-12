@@ -16,19 +16,19 @@ import wx
 from robotide.context import IS_MAC
 
 
-CMD_CHAR = u'\u2318'
-SHIFT_CHAR = u'\u21E7'
-OPTION_CHAR = u'\u2325'
-CTRL_CHAR = u'\u2303'
-SPACE_CHAR = u'\u2423'
-LEFT_CHAR = u'\u2190'
-RIGHT_CHAR = u'\u2192'
-DEL_CHAR = u'\u2326'
-ENTER_CHAR = u'\u2324'
-RETURN_CHAR = u'\u21A9'
-ESC_CHAR = u'\u238B'
-UP_CHAR = u'\u2191'
-DOWN_CHAR = u'\u2193'
+CMD_CHAR = '\\u2318'
+SHIFT_CHAR = '\\u21E7'
+OPTION_CHAR = '\\u2325'
+CTRL_CHAR = '\\u2303'
+SPACE_CHAR = '\\u2423'
+LEFT_CHAR = '\\u2190'
+RIGHT_CHAR = '\\u2192'
+DEL_CHAR = '\\u2326'
+ENTER_CHAR = '\\u2324'
+RETURN_CHAR = '\\u21A9'
+ESC_CHAR = '\\u238B'
+UP_CHAR = '\\u2191'
+DOWN_CHAR = '\\u2193'
 
 _REPLACE = {
     'Cmd': CMD_CHAR,
@@ -57,7 +57,7 @@ def localize_shortcuts(string):
 def _replace_mac_chars(string):
     if not IS_MAC or not string:
         return string
-    for key, value in _REPLACE.items():
+    for key, value in list(_REPLACE.items()):
         string = string.replace(key, value)
     return string
 
@@ -74,7 +74,7 @@ class Shortcut(object):
     def _replace_chars_in_mac(self, shortcut):
         return _replace_mac_chars(shortcut)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.value)
 
     def _normalize(self, shortcut):

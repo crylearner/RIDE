@@ -370,7 +370,7 @@ class _List(object):
             return {}
         if is_dict_like(names):
             return dict((int(index), names[index]) for index in names)
-        return dict(zip(range(list_length), names))
+        return dict(list(zip(list(range(list_length)), names)))
 
     def _yield_list_diffs(self, list1, list2, names):
         for index, (item1, item2) in enumerate(zip(list1, list2)):
@@ -596,7 +596,7 @@ class _Dictionary(object):
         The given dictionary is never altered by this keyword.
         """
         self.dictionary_should_contain_key(dictionary, key, msg)
-        actual, expected = unicode(dictionary[key]), unicode(value)
+        actual, expected = str(dictionary[key]), str(value)
         default = "Value of dictionary key '%s' does not match: %s != %s" % (key, actual, expected)
         _verify_condition(actual == expected, default, msg)
 
@@ -608,7 +608,7 @@ class _Dictionary(object):
         The given dictionary is never altered by this keyword.
         """
         default = "Dictionary does not contain value '%s'." % value
-        _verify_condition(value in dictionary.values(), default, msg)
+        _verify_condition(value in list(dictionary.values()), default, msg)
 
     def dictionary_should_not_contain_value(self, dictionary, value, msg=None):
         """Fails if ``value`` is found from ``dictionary``.
@@ -618,7 +618,7 @@ class _Dictionary(object):
         The given dictionary is never altered by this keyword.
         """
         default = "Dictionary contains value '%s'." % value
-        _verify_condition(not value in dictionary.values(), default, msg)
+        _verify_condition(not value in list(dictionary.values()), default, msg)
 
     def dictionaries_should_be_equal(self, dict1, dict2, msg=None, values=True):
         """Fails if the given dictionaries are not equal.

@@ -111,7 +111,7 @@ class ViewAllTagsDialog(wx.Frame, listmix.ColumnSorterMixin):
         for tag_name, tests in self._results:
             self._tags_list.SetClientData(self.unique_tags, (tests, tag_name))
             self._tags_list.InsertStringItem(
-                self.unique_tags, unicode(tag_name))
+                self.unique_tags, str(tag_name))
             self.tagged_test_cases += tests
             self._tags_list.SetStringItem(self.unique_tags, 1, str(len(tests)))
             self._tags_list.SetItemData(self.unique_tags, self.unique_tags)
@@ -150,10 +150,10 @@ class ViewAllTagsDialog(wx.Frame, listmix.ColumnSorterMixin):
         for test in self.frame._controller.all_testcases():
             self._test_cases.append(test)
             for tag in test.tags:
-                if tag.is_empty() or len(unicode(tag).strip()) == 0:
+                if tag.is_empty() or len(str(tag).strip()) == 0:
                     continue
                 else:
-                    tag_name = unicode(tag)
+                    tag_name = str(tag)
                 if tag_name in self._unique_tags:
                     self._unique_tags[tag_name].append(test)
                     self._tagit[tag_name].append(tag)
@@ -163,7 +163,7 @@ class ViewAllTagsDialog(wx.Frame, listmix.ColumnSorterMixin):
 
         self.total_test_cases = len(self._test_cases)
         self._results = sorted(
-            self._unique_tags.items(), key=lambda x: len(x[1]), reverse=True)
+            list(self._unique_tags.items()), key=lambda x: len(x[1]), reverse=True)
 
     def GetListCtrl(self):
         return self._tags_list
