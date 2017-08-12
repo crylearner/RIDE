@@ -49,8 +49,8 @@ def requires_focus(function):
             function(self, *args)
     return decorated_function
 
-
-class KeywordEditor(GridEditor, RideEventHandler):
+class KeywordEditorMetaclass(type(GridEditor), type(RideEventHandler)):pass
+class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetaclass):
     _no_cell = (-1, -1)
     _popup_menu_shown = False
     dirty = property(lambda self: self._controller.dirty)

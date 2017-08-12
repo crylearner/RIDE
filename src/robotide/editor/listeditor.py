@@ -12,13 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+
+from robotide.context import ctrl_or_cmd, bind_keys_to_evt_menu, IS_WINDOWS
+from robotide.controller.commands import MoveUp, MoveDown, DeleteItem
+from robotide.utils import RideEventHandler
+from robotide.utils.eventhandler import eventhandlertype
+from robotide.widgets import PopupMenu, PopupMenuItems, ButtonWithHandler, Font
 import wx
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-from robotide.controller.commands import MoveUp, MoveDown, DeleteItem
-
-from robotide.utils import RideEventHandler
-from robotide.widgets import PopupMenu, PopupMenuItems, ButtonWithHandler, Font
-from robotide.context import ctrl_or_cmd, bind_keys_to_evt_menu, IS_WINDOWS
 
 
 class ListEditorBase(wx.Panel):
@@ -139,8 +140,8 @@ class ListEditorBase(wx.Panel):
     def has_error(self, controller):
         return False
 
-
-class ListEditor(ListEditorBase, RideEventHandler): pass
+class ListEditorMetaclass(type(ListEditorBase), type(RideEventHandler)):pass
+class ListEditor(ListEditorBase, RideEventHandler, metaclass=ListEditorMetaclass): pass
 
 
 class AutoWidthColumnList(wx.ListCtrl, ListCtrlAutoWidthMixin):

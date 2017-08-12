@@ -249,8 +249,9 @@ class DataFileWrapper(object): # TODO: bad class name
         output = StringIO()
         data.save(output=output, format='txt',
                   txt_separating_spaces=self._settings['txt number of spaces'])
-        return output.getvalue().decode('UTF-8')
-
+        # add by yyf. FIXME:: encoding ?
+        #return output.getvalue().decode('UTF-8')
+        return output.getvalue()
 
 class SourceEditor(wx.Panel):
 

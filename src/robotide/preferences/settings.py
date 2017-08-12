@@ -16,7 +16,7 @@ import os
 import shutil
 
 from robotide.context import SETTINGS_DIRECTORY, LIBRARY_XML_DIRECTORY
-from robotide.preferences.configobj import ConfigObj, ConfigObjError,\
+from configobj import ConfigObj, ConfigObjError,\
     Section, UnreprError
 from robotide.preferences import excludes
 from robotide.publish import RideSettingsChanged
