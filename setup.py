@@ -1,7 +1,7 @@
 import os
 from os.path import abspath, join, dirname, isdir, isfile
 from distutils.core import setup
-
+from setuptools import setup
 
 def find_packages(where):
     def is_package(path):
@@ -60,5 +60,5 @@ setup(
     # Always install everything, since we may be switching between versions
     options={'install': {'force': True}},
     scripts=['src/bin/ride.py', 'ride_postinstall.py'],
-    requires=['Pygments']
+    install_requires=['Pygments', 'robotframework', 'configobj']
 )
