@@ -530,7 +530,7 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
 
     def OnCellLeftClick(self, event):
         self._tooltips.hide()
-        if event.ControlDown() or event.CmdDown():
+        if event.ControlDown(): # add by yyf: just  remove event.CmdDown()
             if self._navigate_to_matching_user_keyword(event.Row, event.Col):
                 return
         if not self._has_been_clicked:
@@ -678,7 +678,7 @@ class ContentAssistCellEditor(grid.PyGridCellEditor):
             self._tc.PushEventHandler(evthandler)
 
     def SetSize(self, rect):
-        self._tc.SetDimensions(rect.x, rect.y, rect.width + 2, rect.height + 2,
+        self._tc.SetSize(rect.x, rect.y, rect.width + 2, rect.height + 2,
                                wx.SIZE_ALLOW_MINUS_ONE)
 
     def SetHeight(self, height):

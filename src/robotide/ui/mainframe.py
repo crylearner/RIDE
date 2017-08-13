@@ -148,14 +148,14 @@ class RideFrame(wx.Frame, RideEventHandler, metaclass=RideFrameMetaclass):
     def OnSize(self, event):
         if not self.IsMaximized():
             self._application.settings['mainframe maximized'] = False
-            self._application.settings['mainframe size'] = self.GetSizeTuple()
+            self._application.settings['mainframe size'] = self.GetSize().Get()
         event.Skip()
 
     def OnMove(self, event):
         # When the window is Iconized, a move event is also raised, but we
         # don't want to update the position in the settings file
         if not self.IsIconized() and not self.IsMaximized():
-            self._application.settings['mainframe position'] = self.GetPositionTuple()
+            self._application.settings['mainframe position'] = self.GetPosition().Get()
         event.Skip()
 
     def OnMaximize(self, event):
@@ -215,7 +215,7 @@ class RideFrame(wx.Frame, RideEventHandler, metaclass=RideFrameMetaclass):
     def OnOpenDirectory(self, event):
         if self.check_unsaved_modifications():
             path = wx.DirSelector(message='Choose a directory containing Robot files',
-                                  defaultPath=self._controller.default_dir)
+                                  default_path=self._controller.default_dir)
             if path:
                 self.open_suite(path)
 

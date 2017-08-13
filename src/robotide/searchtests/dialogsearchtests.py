@@ -11,10 +11,13 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+import functools
+
 from robotide.utils import overrides
 from robotide.widgets import Dialog, VerticalSizer, VirtualList, Label, HelpLabel, ImageProvider, ButtonWithHandler
-import wx
 from robotide.widgets.list import ListModel
+import wx
+
 
 class TestsDialog(Dialog):
 
@@ -224,7 +227,7 @@ class TestsDialog(Dialog):
 class _TestSearchListModel(ListModel):
 
     def __init__(self, tests):
-        self._tests = sorted(tests, cmp=lambda x, y: cmp(x[1], y[1]))
+        self._tests = sorted(tests, key=lambda x: x[1])
 
     @property
     @overrides(ListModel)

@@ -342,9 +342,12 @@ class _KeywordData(list):
         return result
 
     def _sort_by_attr(self, keywords, sort_order):
-        return sorted(keywords, functools.cmp_to_key(self._get_comparator_for(self.headers[sort_order.column].lower())),
+        return sorted(keywords, key=self._get_key_for(self.headers[sort_order.column].lower()),
                       reverse=not sort_order.sort_up)
 
+    def _get_key_for(self, atrr_name):
+        return lambda kw:self._value_lowerer(kw, atrr_name)
+    
     def _get_comparator_for(self, atrr_name):
         return lambda kw, kw2: cmp(self._value_lowerer(kw, atrr_name),
                                    self._value_lowerer(kw2, atrr_name))

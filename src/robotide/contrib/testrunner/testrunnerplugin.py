@@ -451,7 +451,7 @@ class TestRunnerPlugin(Plugin):
         # robot wants to know a fixed size for output, so calculate the
         # width of the window based on average width of a character. A
         # little is subtracted just to make sure there's a little margin
-        out_width, _ = self.out.GetSizeTuple()
+        out_width, _ = self.out.GetSize().Get()
         char_width = self.out.GetCharWidth()
         return str(int(out_width/char_width)-10)
 

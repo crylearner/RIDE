@@ -1,10 +1,8 @@
 import re
 import unittest
-from mock import Mock
-from nose.tools import assert_equals, assert_true, assert_false
+from unittest.mock import Mock
 
-from robotide.robotapi import (
-    Fixture, Documentation, Timeout, Tags, Return, TestCaseFile)
+from nose.tools import assert_equals, assert_true, assert_false
 from robotide.controller.filecontrollers import TestCaseFileController
 from robotide.controller.settingcontrollers import (
     DocumentationController, FixtureController, TagsController,
@@ -13,13 +11,15 @@ from robotide.controller.settingcontrollers import (
 from robotide.controller.tablecontrollers import (
     VariableTableController, MetadataListController, ImportSettingsController,
     _WithListOperations)
+from robotide.controller.tags import Tag
 from robotide.publish.messages import (
     RideImportSetting, RideImportSettingRemoved, RideImportSettingAdded,
     RideImportSettingChanged)
-from robotide.controller.tags import Tag
+from robotide.robotapi import (
+    Fixture, Documentation, Timeout, Tags, Return, TestCaseFile)
 
-from resources.mocks import PublisherListener
 from controller.base_command_test import _FakeProject
+from resources.mocks import PublisherListener
 
 
 class _FakeParent(_FakeProject):

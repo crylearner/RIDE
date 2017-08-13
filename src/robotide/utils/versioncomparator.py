@@ -28,7 +28,9 @@ def cmp_versions(version1, version2):
         l2 += ['' for _ in range(d)]
     if d < 0:
         l1 += ['' for _ in range(-d)]
-    return cmp(l1, l2)
+    if l1 == l2: return 0
+    elif l1 < l2: return -1
+    else: return 1
 
 _PREVIEW_VERSION = re.compile(r'(\d+)(\.\d+)*(a|b|rc)(\d*)$')
 _PREVIEW_PREFERENCE = {'a':-3, 'b':-2, 'rc':-1}

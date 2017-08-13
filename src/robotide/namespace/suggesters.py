@@ -47,7 +47,7 @@ class HistorySuggester(_Suggester):
 
     def store(self, name):
         self._suggestions += [self._suggestion(name)]
-        self._suggestions.sort()
+        self._suggestions.sort(key=lambda x:x.name)
 
 
 class _ImportSuggester(_Suggester):

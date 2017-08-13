@@ -12,7 +12,7 @@
 
 import wx
 
-class HorizontalFlowSizer(wx.PySizer):
+class HorizontalFlowSizer(wx.Sizer):
     """
     A sizer which lays out component left to right top to bottom. Java uses
     these quite heavily
@@ -23,7 +23,7 @@ class HorizontalFlowSizer(wx.PySizer):
         '''
         Initializes the object:
         '''
-        wx.PySizer.__init__(self)
+        wx.Sizer.__init__(self)
         self._frozen       = False
         self._needed_size  = None
         self._height = 0

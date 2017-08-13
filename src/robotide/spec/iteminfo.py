@@ -55,14 +55,29 @@ class ItemInfo(object):
     def is_user_keyword(self):
         return not self.is_library_keyword()
 
-    def __cmp__(self, other):
+    def __lt__(self, other):
         if self._priority == other._priority:
-            name_cmp = cmp(self.name.upper(), other.name.upper())
-            return name_cmp if name_cmp else cmp(self.source, other.source)
-        return cmp(self._priority, other._priority)
+            if self.name.upper() == other.name.upper():
+                return self.source < other.source
+            else:
+                return self.name.upper() < other.name.upper()
+        else:
+            return self._priority < other._priority
+    
+    def __le__(self, other):
+        return self.__lt__(other) or self.__eq__(other)
+    
+    def __gt__(self, other):
+        return not self.__le__(other)
+    
+    def __ge__(self, other):
+        return not self.__lt__(other)
 
     def __eq__(self, other):
-        return not self.__cmp__(other) if isinstance(other, ItemInfo) else False
+        if not isinstance(other, ItemInfo) : return False
+        return self._priority == other._priority and \
+                self.name.upper() == other.name.upper() and \
+                self._priority == other._priority
 
     def __hash__(self):
         return hash((self.name, self.source))

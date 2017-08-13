@@ -8,14 +8,17 @@ from robotide.robotapi import TestCaseFile
 
 from resources import PYAPP_REFERENCE, wx
 
-
 def file_controller():
     return TestCaseFileController(TestCaseFile())
 
 
 class TestNameDialogTest(unittest.TestCase):
+    
     _frame = wx.Frame(None)
 
+    def setUp(self):
+        self._app = wx.App(0)
+        
     def test_creation(self):
         test_ctrl = file_controller().create_test('A test')
         dlg = TestCaseNameDialog(test_ctrl)
@@ -23,6 +26,9 @@ class TestNameDialogTest(unittest.TestCase):
 
 
 class UserKeywordNameDialogTest(unittest.TestCase):
+
+    def setUp(self):
+        self._app = wx.App(0)
 
     def test_creation(self):
         kw_ctrl = file_controller().create_keyword('Keyword it is')

@@ -310,6 +310,9 @@ class TestCaseController(_WithStepsController):
         if other.__class__ != self.__class__:
             return False
         return self._test == other._test
+    
+    def __hash__(self):
+        return id(self._test) if self._test else id(self.__class__)
 
     @property
     def longname(self):
@@ -394,6 +397,10 @@ class UserKeywordController(_WithStepsController):
         if other.__class__ != self.__class__:
             return False
         return self._kw == other._kw
+    
+    
+    def __hash__(self):
+        return id(self._kw) if self._kw else id(self.__class__)
 
     @property
     def info(self):

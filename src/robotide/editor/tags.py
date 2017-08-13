@@ -134,7 +134,7 @@ class TagBox(wx.TextCtrl):
 
     def _apply_properties(self):
         self.SetValue(self._properties.text)
-        self.SetToolTipString(self._properties.tooltip)
+        self.SetToolTip(self._properties.tooltip)
         self.SetEditable(self._properties.enabled)
         size = self._get_size()
         self.SetMaxSize(size)

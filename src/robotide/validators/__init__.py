@@ -18,7 +18,7 @@ import wx
 from robotide import robotapi, utils
 
 
-class _AbstractValidator(wx.PyValidator):
+class _AbstractValidator(wx.Validator):
     """Implements methods to keep wxPython happy and some helper methods."""
 
     def Clone(self):
@@ -78,13 +78,15 @@ class ArgumentsValidator(_AbstractValidator):
 
     def _validate(self, args_str):
         try:
+            self.arg_c = ''
             types = [self._get_type(arg)
                      for arg in utils.split_value(args_str)]
         except ValueError:
-            return "Invalid argument syntax '%s'" % arg
+            return "Invalid argument syntax '%s'" % self.arg_c
         return self._validate_argument_order(types)
 
     def _get_type(self, arg):
+        self.arg_c = arg
         if robotapi.is_scalar_var(arg):
             return ArgumentTypes.SCALAR
         elif robotapi.is_scalar_var(arg.split("=")[0]):

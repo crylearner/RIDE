@@ -6,6 +6,8 @@ class TestAllFiles(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.project = datafilereader.construct_project(datafilereader.ALL_FILES_PATH)
+        print(cls.project.datafiles)
+        print(cls.project.data)
 
     @classmethod
     def tearDownClass(cls):
@@ -32,6 +34,7 @@ class TestAllFiles(unittest.TestCase):
         self.assertFalse(unused.is_used())
 
     def test_used_resource_knows_it_is_used(self):
+        print(self.project.datafiles)
         used = datafilereader.get_ctrl_by_name('Used Resource', self.project.datafiles)
         self.assertTrue(used.is_used())
 

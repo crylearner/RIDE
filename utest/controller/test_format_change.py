@@ -1,19 +1,19 @@
 import os
 import unittest
-from mock import Mock
+from unittest.mock import Mock
 
-from robotide.robotapi import TestCaseFile, ResourceFile
+from nose.tools import (
+    assert_is_not_none, assert_true, assert_false, assert_equals,
+    assert_is_none)
 from robotide.controller import Project
 from robotide.controller.commands import RenameResourceFile
 from robotide.controller.filecontrollers import TestCaseFileController
 from robotide.namespace.namespace import Namespace
-from nose.tools import (
-    assert_is_not_none, assert_true, assert_false, assert_equals,
-    assert_is_none)
+from robotide.robotapi import TestCaseFile, ResourceFile
+from robotide.spec.librarymanager import LibraryManager
 
 from resources import (
     MINIMAL_SUITE_PATH, SUITEPATH, MessageRecordingLoadObserver, FakeSettings)
-from robotide.spec.librarymanager import LibraryManager
 
 
 class TestFormatChange(unittest.TestCase):

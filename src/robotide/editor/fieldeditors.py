@@ -46,8 +46,10 @@ class ValueEditor(wx.Panel):
         self._editor.AppendText(value)
         sizer.Add(self._editor, 1, self._sizer_flags_for_editor, 3)
         self._sizer.Add(sizer, 1, wx.EXPAND)
-        wx.EVT_KEY_DOWN(self._editor, self.on_key_down)
-
+        # add by yyf. use bind instead
+        #wx.EVT_KEY_DOWN(self._editor, self.on_key_down)
+        self._editor.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        
     def _get_text_ctrl(self):
         return wx.TextCtrl(self, size=(600, -1))
 

@@ -197,6 +197,7 @@ class _MenuItem(object):
 
     def set_wx_menu_item(self, wx_menu_item):
         self._wx_menu_item = wx_menu_item
+        self.id = self._wx_menu_item.GetId()
 
     def register(self, action):
         self._action_delegator.add(action)

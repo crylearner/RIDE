@@ -1,10 +1,14 @@
 import os
-from resources import FakeSettings
+
 from robotide.controller import Project
 from robotide.controller.commands import NullObserver
 from robotide.namespace import Namespace
 from robotide.spec.librarymanager import LibraryManager
 
+from resources.mocks import FakeSettings
+
+
+#from resources import FakeSettings
 RESOURCES_DIR = 'resources'
 RESOURCES_HTML = 'resource.html'
 DATAPATH = os.path.join(os.path.abspath(os.path.split(__file__)[0]),

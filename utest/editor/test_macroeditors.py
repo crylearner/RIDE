@@ -40,6 +40,7 @@ class MockKwEditor(object):
 class MacroEditorTest(unittest.TestCase):
 
     def setUp(self):
+        self._app = wx.App(0)
         controller = TestCaseController(IncredibleMock(), IncredibleMock())
         plugin = FakePlugin({}, controller)
         self.tc_editor = TestCaseEditor(

@@ -274,6 +274,9 @@ class NonExistingStep(object):
 
 class NullObserver(object):
     notify = finish = lambda x: None
+    def error(self, x):
+        print(x)
+
 
 
 class RenameKeywordOccurrences(_ReversibleCommand):

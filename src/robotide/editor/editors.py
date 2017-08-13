@@ -195,6 +195,8 @@ class Settings(wx.CollapsiblePane):
 
     def GetPane(self):
         pane = wx.CollapsiblePane.GetPane(self)
+        #if not isinstance(pane, TestCaseFileEditor):
+        #    print("error: Settings' parent is not _RobotTableEditor: ", type(pane.__class__))
         pane.tooltip_allowed = self.GetParent().tooltip_allowed
         return pane
 

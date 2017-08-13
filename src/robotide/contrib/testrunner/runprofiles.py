@@ -201,7 +201,7 @@ class PybotProfile(BaseProfile):
         label = Label(panel, label="Arguments: ")
         self._arguments = wx.TextCtrl(
             panel, wx.ID_ANY, size=(-1, -1), value=self.arguments)
-        self._arguments.SetToolTipString(
+        self._arguments.SetToolTip(
             "Arguments for the test run. Arguments are space separated list.")
         self._arguments.Bind(wx.EVT_TEXT, self.OnArgumentsChanged)
         sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -255,7 +255,7 @@ class PybotProfile(BaseProfile):
             'red' if invalid_message else 'white')
         self._arguments.SetForegroundColour(
             'white' if invalid_message else 'black')
-        self._arguments.SetToolTipString(
+        self._arguments.SetToolTip(
             invalid_message or
             'Arguments for the test run. Arguments are space separated list.')
 
