@@ -400,9 +400,10 @@ class UserKeywordController(_WithStepsController):
     
     
     def __hash__(self):
-        return id(self._kw) if self._kw else id(self.__class__)
-
-    @property
+        #return id(self._kw) if self._kw else id(self.__class__)
+        return hash(self._kw)
+    
+    @property  
     def info(self):
         if isinstance(self.datafile, robotapi.ResourceFile):
             return ResourceUserKeywordInfo(self.data)
