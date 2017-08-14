@@ -162,7 +162,7 @@ class TagBox(wx.TextCtrl):
             elif event.GetKeyCode() == wx.WXK_RETURN:
                 self._update_value()
                 # FIXME: Is this needed?
-                return # Crashes RIDE on Linux if event.Skip is called
+                # return # Crashes RIDE on Linux if event.Skip is called
             elif event.GetKeyCode() == wx.WXK_DELETE:
                 self.SetValue('')
         event.Skip()
@@ -180,7 +180,7 @@ class TagBox(wx.TextCtrl):
 
     def OnKillFocus(self, event):
         self._update_value()
-        # event.Skip() Can't skip on Linux as this causes crash
+        event.Skip() #FIXME: why ? Can't skip on Linux as this causes crash
 
     def _update_value(self):
         self._properties.change_value(self.value)
