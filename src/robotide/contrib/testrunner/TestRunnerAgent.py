@@ -433,7 +433,7 @@ class StreamHandler(object):
             write_list.append('P')
             s = pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
             write_list.extend([str(len(s)), '|', s])
-        self.fp.write(''.join(write_list))
+        self.fp.write(''.join(write_list).encode(encoding='utf_8', errors='strict'))
         #self.fp.flush()
 
     def load(self):
@@ -455,7 +455,7 @@ class StreamHandler(object):
         msglen = int(msglen)
         buff = StringIO()
         # Don't use StringIO.len for sizing, reports string len not bytes
-        buff.write(self.fp.read(msglen))
+        buff.write(self.fp.read(msglen)) # FIXME:: why here is str not bytes
         try:
             if msgtype == 'J':
                 return self._json_decoder(buff.getvalue())

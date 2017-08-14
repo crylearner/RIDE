@@ -277,7 +277,7 @@ class Process(object):
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         stdin=subprocess.PIPE,
-                        cwd=self._cwd.encode(utils.SYSTEM_ENCODING))
+                        cwd=self._cwd)
         if IS_WINDOWS:
             startupinfo = subprocess.STARTUPINFO()
             try:
@@ -289,7 +289,8 @@ class Process(object):
         else:
             subprocess_args['preexec_fn'] = os.setsid
             subprocess_args['shell'] = True
-        self._process = subprocess.Popen(command.encode(utils.SYSTEM_ENCODING),
+        print(command)
+        self._process = subprocess.Popen(command,
                                          **subprocess_args)
         self._process.stdin.close()
         self._output_stream = StreamReaderThread(self._process.stdout)
@@ -338,7 +339,7 @@ class Process(object):
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect(('localhost', self._port))
-            sock.send(data)
+            sock.send(data.encode("uft-8"))
         finally:
             sock.close()
 
@@ -391,7 +392,7 @@ class StreamReaderThread(object):
             self._queue.put(line)
 
     def pop(self):
-        result = ""
+        result = bytearray()
         for _ in range(self._queue.qsize()):
             try:
                 result += self._queue.get_nowait()
