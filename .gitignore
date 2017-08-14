@@ -13,3 +13,4 @@ RIDE.wiki
 rfgen.py
 MANIFEST
 /.settings
+/src/bin
