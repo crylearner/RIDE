@@ -259,7 +259,7 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
     def _data_changed(self, data):
         if self._controller == data.item:
             self._write_steps(data.item)
-
+        
     def _write_steps(self, controller):
         data = []
         self._write_headers(controller)
@@ -656,10 +656,10 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
                 old_name, new_name, RenameProgressObserver(self.GetParent())))
 
 
-class ContentAssistCellEditor(grid.PyGridCellEditor):
+class ContentAssistCellEditor(grid.GridCellTextEditor):
 
     def __init__(self, plugin, controller):
-        grid.PyGridCellEditor.__init__(self)
+        grid.GridCellTextEditor.__init__(self)
         self._plugin = plugin
         self._controller = controller
         self._grid = None
@@ -694,10 +694,19 @@ class ContentAssistCellEditor(grid.PyGridCellEditor):
     def EndEdit(self, row, col, grid, *ignored):
         value = self._get_value()
         if value != self._original_value:
+            self._original_value = value
             grid.cell_value_edited(row, col, value)
         self._tc.hide()
         grid.SetFocus()
         return True
+     
+    def ApplyEdit(self, row, col, grid):
+        super().ApplyEdit(row, col, grid)
+        value = self._get_value() #FIXME:: better to read from controller ?
+        self._tc.SetValue(value)
+        grid.SetCellValue(row, col, value)
+         
+
 
     def _get_value(self):
         suggestion = self._tc.content_assist_value()
@@ -723,6 +732,7 @@ class ContentAssistCellEditor(grid.PyGridCellEditor):
 
     def Clone(self):
         return ContentAssistCellEditor()
+
 
 
 class ChooseUsageSearchStringDialog(wx.Dialog):
