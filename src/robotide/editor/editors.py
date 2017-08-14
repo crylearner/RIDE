@@ -99,9 +99,9 @@ class _RobotTableEditor(EditorPanel):
             self._reset_last_show_tooltip()
 
     def _mouse_outside_tooltip(self):
-        mx, my = wx.GetMousePosition()
-        tx, ty = self._last_shown_tooltip.screen_position
-        dx, dy = self._last_shown_tooltip.size
+        mx, my = wx.GetMousePosition().Get() # add by yyf
+        tx, ty = self._last_shown_tooltip.screen_position.Get()
+        dx, dy = self._last_shown_tooltip.size.Get()
         return (mx < tx or mx > tx+dx) or (my < ty or my > ty+dy)
 
     def tooltip_allowed(self, tooltip):

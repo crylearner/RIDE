@@ -49,7 +49,7 @@ class GridToolTips(object):
         if window is None:
             return False
         rect = window.GetTopLevelParent().GetScreenRect()
-        return rect.Inside(wx.GetMousePosition())
+        return rect.Contains(*wx.GetMousePosition().Get())
 
     def OnGridEditorHidden(self, event):
         cell = event.Row, event.Col
@@ -62,7 +62,7 @@ class GridToolTips(object):
             self._tooltip.show_at(position)
 
     def _calculate_tooltip_position(self):
-        x, y = wx.GetMousePosition()
+        x, y = wx.GetMousePosition().Get()
         return x + 16, y + 16   # don't place tooltip under cursor
 
     def _hide_tooltip(self):

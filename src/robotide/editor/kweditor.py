@@ -387,7 +387,7 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
         self._tree.refresh_datafile(item, event)
 
     def _calculate_position(self):
-        x, y = wx.GetMousePosition()
+        x, y = wx.GetMousePosition().Get()
         return x, y + 20
 
     def OnEditor(self, event):
