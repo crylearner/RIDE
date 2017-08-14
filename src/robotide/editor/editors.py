@@ -152,7 +152,9 @@ class _RobotTableEditor(EditorPanel):
 
     def _collabsible_changed(self, event=None):
         self._store_settings_open_status()
-        self.GetSizer().Layout()
+        # add by yyf
+        #self.GetSizer().Layout()
+        self.Layout()
         self.Refresh()
         if event:
             event.Skip()
@@ -188,7 +190,8 @@ class Settings(wx.CollapsiblePane):
             style=wx.CP_DEFAULT_STYLE | wx.CP_NO_TLW_RESIZE)
         self._sizer = wx.BoxSizer(wx.VERTICAL)
         self._editors = []
-        self.Bind(wx.EVT_SIZE, self._recalc_size)
+        #remove by yyf. CollapsiblePane will auto resize
+        #self.Bind(wx.EVT_SIZE, self._recalc_size) 
 
     def Expand(self):
         wx.CollapsiblePane.Expand(self)
@@ -197,7 +200,7 @@ class Settings(wx.CollapsiblePane):
         pane = wx.CollapsiblePane.GetPane(self)
         #if not isinstance(pane, TestCaseFileEditor):
         #    print("error: Settings' parent is not _RobotTableEditor: ", type(pane.__class__))
-        pane.tooltip_allowed = self.GetParent().tooltip_allowed
+        #pane.tooltip_allowed = self.GetParent().tooltip_allowed
         return pane
 
     def close(self):
@@ -210,8 +213,10 @@ class Settings(wx.CollapsiblePane):
 
     def create_editor_for(self, controller, plugin, tree):
         editor_cls = self._get_editor_class(controller)
-        return editor_cls(self.GetPane(), controller, plugin, tree)
-
+        editor = editor_cls(self.GetPane(), controller, plugin, tree)
+        editor.setParentEditor(self.GetParent())
+        return editor
+        
     def _get_editor_class(self, controller):
         if isinstance(controller, DocumentationController):
             return DocumentationEditor
@@ -232,6 +237,7 @@ class Settings(wx.CollapsiblePane):
             height = sum(editor.Size[1] + 2 * self.BORDER
                          for editor in self._editors)
             self.SetSize((-1, height + expand_button_height))
+            print("resize:", -1, height + expand_button_height)
             self._sizer.Layout()
         if event:
             event.Skip()

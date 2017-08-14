@@ -134,9 +134,14 @@ class SettingEditor(wx.Panel, utils.RideEventHandler, metaclass=SettingEditorMet
 
     def OnLeaveWindow(self, event):
         self._stop_popup_timer()
+    
+    def setParentEditor(self, editor):
+        '''editor is actually an object of _RobotTableEditor
+        '''
+        self._parentEditor = editor;
 
     def OnPopupTimer(self, event):
-        if self.Parent.tooltip_allowed(self._tooltip):
+        if self._parentEditor.tooltip_allowed(self._tooltip):
             details, title = self._get_details_for_tooltip()
             if details:
                 self._tooltip.set_content(details, title)
