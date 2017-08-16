@@ -53,7 +53,7 @@ class MenuBar(object):
         menu = self._find_menu(action.menu_name)
         if not menu:
             menu = self._create_menu(action.menu_name)
-        menu.add_menu_item(action)
+        menu.add_menu_item(action)    
 
     def _find_menu(self, name):
         registered = self._name_builder.get_registered_name(name)
@@ -79,14 +79,14 @@ class _Menu(object):
     def OnMenuOpen(self, event):
         if self.wx_menu == event.GetMenu() and not self._open:
             self._open = True
-            for menu_item in list(self._menu_items.values()):
+            for menu_item in self._menu_items.values():
                 menu_item.refresh_availability()
         event.Skip()
 
     def OnMenuClose(self, event):
         if self._open:
             self._open = False
-            for menu_item in list(self._menu_items.values()):
+            for menu_item in self._menu_items.values():
                 menu_item.set_enabled()
         event.Skip()
 
@@ -110,7 +110,7 @@ class _Menu(object):
         return menu_item
 
     def _get_menu_item(self, action):
-        for menu_item in list(self._menu_items.values()):
+        for menu_item in self._menu_items.values():
             if self._names_equal(menu_item, action):
                 return menu_item
         return None
@@ -134,9 +134,9 @@ class _Menu(object):
         menu_item.set_wx_menu_item(wx_menu_item)
         return menu_item
 
-    def remove_menu_item(self, id):
-        self.wx_menu.Delete(id)
-        del(self._menu_items[id])
+    def remove_menu_item(self, item): 
+        self.wx_menu.Delete(item._wx_menu_item)
+        del(self._menu_items[item.id])
 
 
 class _NameBuilder(object):
@@ -197,7 +197,6 @@ class _MenuItem(object):
 
     def set_wx_menu_item(self, wx_menu_item):
         self._wx_menu_item = wx_menu_item
-        self.id = self._wx_menu_item.GetId()
 
     def register(self, action):
         self._action_delegator.add(action)
@@ -205,14 +204,16 @@ class _MenuItem(object):
 
     def unregister(self, action):
         if self._action_delegator.remove(action):
-            self._menu.remove_menu_item(self.id)
+            self._menu.remove_menu_item(self)
 
     def refresh_availability(self):
         self._wx_menu_item.Enable(self._is_enabled())
 
     def set_enabled(self):
         self._wx_menu_item.Enable(True)
-        
+    
+    def _is_enabled(self):
+        raise NotImplementedError    
 
 
 class MenuItem(_MenuItem):
@@ -222,11 +223,6 @@ class MenuItem(_MenuItem):
 
 
 class SeparatorMenuItem(_MenuItem):
-
-    def set_wx_menu_item(self, wx_menu_item):
-        _MenuItem.set_wx_menu_item(self, wx_menu_item)
-        #remove by yyf. FIXME:: wxpython3 has no this method, maybe no need any more
-        #self._wx_menu_item.SetId(self.id)
 
     def _is_enabled(self):
         return False
