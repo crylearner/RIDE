@@ -83,7 +83,7 @@ class RideFrame(wx.Frame, RideEventHandler, metaclass=RideFrameMetaclass):
         self.Bind(wx.EVT_MAXIMIZE, self.OnMaximize)
         self._subscribe_messages()
         self.Show()
-        wx.CallLater(100, self.actions.register_tools)
+        self._caller = wx.CallLater(100, self.actions.register_tools)
 
     def _subscribe_messages(self):
         for listener, topic in [
