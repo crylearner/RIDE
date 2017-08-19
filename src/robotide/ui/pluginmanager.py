@@ -84,7 +84,7 @@ require RIDE restart for menus to work.")
         return info
 
     def _create_label(self, parent, text):
-        boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        boldFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
         label = Label(parent, wx.ID_ANY, text)
         label.SetFont(boldFont)
