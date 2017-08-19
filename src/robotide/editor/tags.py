@@ -60,6 +60,8 @@ class TagsDisplay(wx.Panel):
             tag_box.saving()
 
     def set_value(self, controller, plugin=None):
+        return self._set_value(controller, plugin)
+    def _set_value(self, controller, plugin=None):
         if not self._tag_boxes:
             self._add_tags(list(controller))
         else:
@@ -103,9 +105,10 @@ class TagsDisplay(wx.Panel):
                 self._destroy_tagbox(tb)
 
     def _destroy_tagbox(self, tagbox):
-        tagbox.Destroy()
+        self._sizer.Hide(tagbox) # FIXME:: don't use Remove, because it is called from tagbox _update_value. But now, if has memeory problem
         self._tag_boxes.remove(tagbox)
-
+        print("remove over")
+        
     def GetSelection(self):
         return None
 
@@ -274,15 +277,25 @@ if __name__ == '__main__':
     class MyMenuApp( wx.App):
         def OnInit(self):
             frame = MyFrame(None , -1, 'Frame Window Demo')
-            sz = wx.BoxSizer()
-            display = TagsDisplay(frame, None)
-            display.add_tag(ForcedTag('forced'), False)
-            display.add_tag(DefaultTag('default'), False)
-            for name in ['foo', 'bar', 'foobo', 'jee', 'huu', 'asb', 'sdfajkd', 'Sprint-1']:
-                display.add_tag(Tag(name), True)
-            display.add_tag(Tag(''), False)
-            display.build()
-            sz.Add(display, 0, wx.GROW|wx.ALL, 5)
+            sz = wx.BoxSizer(wx.HORIZONTAL)
+            t1 = wx.TextCtrl(frame, wx.NewId(), "text1")
+            t1.AppendText("text111")
+            t2 = wx.TextCtrl(frame, wx.NewId(), "text2")
+            t2.AppendText("text222")
+            sz.Add(t1)
+            sz.Add(t2)
+            sz.Layout()
+            frame.SetSizer(sz, deleteOld=True)
+            #for item in sz.GetChildren():
+            sz.Remove()
+#             display = TagsDisplay(frame, None)
+#             display.add_tag(ForcedTag('forced'))
+#             display.add_tag(DefaultTag('default'))
+#             for name in ['foo', 'bar', 'foobo', 'jee', 'huu', 'asb', 'sdfajkd', 'Sprint-1']:
+#                 display.add_tag(Tag(name))
+#             display.add_tag(Tag(''))
+#             display.build()
+            #sz.Add(display, 0, wx.GROW|wx.ALL, 5)
             frame.Show(True)
             self.SetTopWindow(frame)
             return True

@@ -13,15 +13,16 @@
 #  limitations under the License.
 
 from itertools import chain
-import time
 import os
+import time
+import wx
 
 from robotide.namespace.embeddedargs import EmbeddedArgsHandler
-from robotide.publish.messages import RideSelectResource, RideFileNameChanged,\
-    RideSaving, RideSaved, RideSaveAll, RideExcludesChanged
 from robotide.namespace.namespace import _VariableStash
-
+from robotide.publish.messages import RideSelectResource, RideFileNameChanged, \
+    RideSaving, RideSaved, RideSaveAll, RideExcludesChanged
 from robotide.utils import overrides, variablematcher
+
 from .filecontrollers import ResourceFileController
 from .macrocontrollers import KeywordNameController, ForLoopStepController, \
     TestCaseController
