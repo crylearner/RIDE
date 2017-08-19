@@ -23,9 +23,10 @@ class Dialog(wx.Dialog):
         parent = parent or wx.GetTopLevelWindows()[0]
         size = size or (-1, -1)
         # wx.THICK_FRAME allows resizing
-        # remove by yyf. THICK_FRAME no support any more
-        #style = style or wx.DEFAULT_DIALOG_STYLE | wx.THICK_FRAME
-        style = style or wx.DEFAULT_DIALOG_STYLE
+        if wx.VERSION >= (3, 0, 3, ''):  # DEBUG wxPhoenix
+            style = style or (wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        else:
+            style = style or (wx.DEFAULT_DIALOG_STYLE | wx.THICK_FRAME)
         wx.Dialog.__init__(self, parent, title=title, size=size, style=style)
         self.CenterOnParent()
 

@@ -56,7 +56,8 @@ class _DataLoaderThread(Thread):
     def run(self):
         try:
             self.result = self._run()
-        except Exception:
+        except Exception as e:
+            print("DEBUG: exception at DataLoader %s\n" % str(e))
             pass  # TODO: Log this error somehow
 
 

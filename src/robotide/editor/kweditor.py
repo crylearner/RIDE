@@ -401,9 +401,26 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
         self.MoveCursorDown(event.ShiftDown())
 
     def OnKeyDown(self, event):
+        """ Fixed on 4.0.0a3
+        if wx.VERSION >= (3, 0, 3, ''):  # DEBUG wxPhoenix
+            _iscelleditcontrolshown = self.IsCellEditControlEnabled()
+        else:
+        """
+        _iscelleditcontrolshown = self.IsCellEditControlShown()
+
         keycode, control_down = event.GetKeyCode(), event.CmdDown()
-        if keycode == wx.WXK_CONTROL:
+        event.Skip()  # DEBUG seen this skip as soon as possible
+        if keycode == ord('M') and control_down:  #  keycode == wx.WXK_CONTROL
             self._show_cell_information()
+        elif keycode == ord('C') and control_down:
+            # print("DEBUG: captured Control-C\n")
+            self.OnCopy(event)
+        elif keycode == ord('X') and control_down:
+            self.OnCut(event)
+        elif keycode == ord('V') and control_down:
+            self.OnPaste(event)
+        elif keycode == ord('Z') and control_down:
+            self.OnUndo(event)
         elif keycode == ord('A') and control_down:
             self.OnSelectAll(event)
         elif event.AltDown() and keycode in [wx.WXK_DOWN, wx.WXK_UP]:
@@ -413,7 +430,10 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
         elif keycode == wx.WXK_WINDOWS_MENU:
             self.OnCellRightClick(event)
         elif keycode in [wx.WXK_RETURN, wx.WXK_BACK]:
-            self._move_grid_cursor(event, keycode)
+            if not _iscelleditcontrolshown:
+                self._move_grid_cursor(event, keycode)
+            else:
+                self.save()
         elif control_down and keycode == wx.WXK_SPACE:
             self._open_cell_editor_with_content_assist()
         elif control_down and not event.AltDown() and \
@@ -427,8 +447,8 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
         elif control_down and keycode == ord('B'):
             self._navigate_to_matching_user_keyword(
                 self.GetGridCursorRow(), self.GetGridCursorCol())
-        else:
-            event.Skip()
+        # else:
+        #    event.Skip()
 
     def OnGoToDefinition(self, event):
         self._navigate_to_matching_user_keyword(
@@ -491,9 +511,10 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
             self.MoveCursorLeft(event.ShiftDown())
 
     def OnKeyUp(self, event):
+        event.Skip()  # DEBUG seen this skip as soon as possible
         self._tooltips.hide()
         self._hide_link_if_necessary()
-        event.Skip()
+        #  event.Skip()
 
     def _open_cell_editor_with_content_assist(self):
         if not self.IsCellEditControlEnabled():
@@ -663,6 +684,8 @@ class ContentAssistCellEditor(grid.GridCellTextEditor):
         self._plugin = plugin
         self._controller = controller
         self._grid = None
+        self._original_value = None
+        self._tc = None
 
     def show_content_assist(self, args=None):
         self._tc.show_content_assist()
@@ -689,16 +712,18 @@ class ContentAssistCellEditor(grid.GridCellTextEditor):
         self._tc.set_row(row)
         self._original_value = grid.GetCellValue(row, col)
         self._grid = grid
-        self.StartingClick()
 
     def EndEdit(self, row, col, grid, *ignored):
         value = self._get_value()
         if value != self._original_value:
             self._original_value = value
             grid.cell_value_edited(row, col, value)
-        self._tc.hide()
-        grid.SetFocus()
-        return True
+            return True
+        else:
+            # DEBUG wxPhoenix
+            self._tc.hide()
+            grid.SetFocus()
+            return True
      
     def ApplyEdit(self, row, col, grid):
         super().ApplyEdit(row, col, grid)

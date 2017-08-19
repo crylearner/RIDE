@@ -118,7 +118,8 @@ class ExcludePreferences(PreferencesPanel):
         sizer.Add(self._text_box, proportion=wx.EXPAND)
 
     def _add_button_and_status(self, sizer):
-        status_and_button_sizer = wx.GridSizer(rows=1, cols=2, hgap=10)
+        # DEBUG wxPhoenix
+        status_and_button_sizer = wx.GridSizer(rows=1, cols=2, vgap=10, hgap=10)
         status_and_button_sizer.Add(wx.Button(self, id=wx.ID_SAVE))
         self.Bind(wx.EVT_BUTTON, self.OnSave)
         self._status_label = wx.StaticText(self)
@@ -229,3 +230,6 @@ The following shell-style wildcards are supported:
 
     def OnKey(self, *args):
         pass
+
+    def close(self):
+        self.Destroy()

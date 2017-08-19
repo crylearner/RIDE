@@ -339,7 +339,10 @@ class Process(object):
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect(('localhost', self._port))
-            sock.send(data.encode("uft-8"))
+            if isinstance(data, str):
+                sock.send(data.encode("utf-8"))
+            else:
+                sock.send(data)
         finally:
             sock.close()
 

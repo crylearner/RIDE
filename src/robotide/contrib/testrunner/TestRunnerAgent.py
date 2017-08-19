@@ -44,6 +44,8 @@ import os
 import sys
 import socket
 import threading
+import platform
+PLATFORM = platform.python_implementation()
 import socketserver
 
 try:
@@ -53,6 +55,7 @@ try:
     from robot.utils import encoding
 except ImportError:
     encoding = None
+    raise     # DEBUG
 
 
 if sys.hexversion > 0x2060000:
@@ -143,8 +146,11 @@ class TestRunnerAgent:
         self._send_socket("end_suite", name, attrs)
 
     def start_keyword(self, name, attrs):
-        self._send_socket("start_keyword", name, attrs)
-        if self._debugger.is_breakpoint(name, attrs):
+        # pass empty args, see https://github.com/nokia/RED/issues/32#issuecomment-240713102
+        attrs_copy = copy.copy(attrs)
+        attrs_copy['args'] = list()
+        self._send_socket("start_keyword", name, attrs_copy)
+        if self._debugger.is_breakpoint(name, attrs_copy):
             self._debugger.pause()
         paused = self._debugger.is_paused()
         if paused:
@@ -154,7 +160,10 @@ class TestRunnerAgent:
             self._send_socket('continue')
 
     def end_keyword(self, name, attrs):
-        self._send_socket("end_keyword", name, attrs)
+        # pass empty args, see https://github.com/nokia/RED/issues/32#issuecomment-240713102
+        attrs_copy = copy.copy(attrs)
+        attrs_copy['args'] = list()
+        self._send_socket("end_keyword", name, attrs_copy)
         self._debugger.end_keyword(attrs['status']=='PASS')
 
     def message(self, message):
@@ -433,7 +442,7 @@ class StreamHandler(object):
             write_list.append('P')
             s = pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
             write_list.extend([str(len(s)), '|', s])
-        self.fp.write(''.join(write_list).encode(encoding='utf_8', errors='strict'))
+        self.fp.write(''.join(write_list).encode(encoding='utf-8', errors='strict'))
         #self.fp.flush()
 
     def load(self):
