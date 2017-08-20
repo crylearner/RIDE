@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from time import time
-from io import StringIO
+from io import StringIO,BytesIO
 import string
 import wx
 from wx import stc
@@ -27,6 +27,7 @@ from robotide.pluginapi import Plugin, RideSaving, TreeAwarePluginMixin,\
     RideTreeSelection, RideNotebookTabChanging, RideDataChanged,\
     RideOpenSuite, RideDataChangedToDirty
 from robotide.widgets import TextField, Label, HtmlDialog
+
 
 try:
     from . import robotframeworklexer
@@ -176,9 +177,9 @@ class DataValidationHandler(object):
             return True
 
     def _sanity_check(self, data, text):
-        formatted_text = data.format_text(text).encode('UTF-8')
-        c = self._normalize(formatted_text)
-        e = self._normalize(text)
+        formatted_text = data.format_text(text)
+        c = self._normalize(formatted_text.decode('utf-8'))
+        e = self._normalize(text.decode('utf-8'))
         return len(c) == len(e)
 
     def _normalize(self, text):
@@ -221,7 +222,7 @@ class DataFileWrapper(object): # TODO: bad class name
         self._data.execute(SetDataFile(self._create_target_from(content)))
 
     def _create_target_from(self, content):
-        src = StringIO(content)
+        src = BytesIO(content)
         target = self._create_target()
         FromStringIOPopulator(target).populate(src)
         return target
@@ -250,8 +251,8 @@ class DataFileWrapper(object): # TODO: bad class name
         data.save(output=output, format='txt',
                   txt_separating_spaces=self._settings['txt number of spaces'])
         # add by yyf. FIXME:: encoding ?
-        #return output.getvalue().decode('UTF-8')
-        return output.getvalue()
+        return output.getvalue().encode('UTF-8')
+        #return output.getvalue()
 
 class SourceEditor(wx.Panel):
 
@@ -300,8 +301,9 @@ class SourceEditor(wx.Panel):
         if self._syntax_colorization_help_exists:
             return
         label = Label(self, label="Syntax colorization disabled due to missing requirements.")
-        link = wx.HyperlinkCtrl(self, -1, label="Get help", url="")
-        link.Bind(wx.EVT_HYPERLINK, self.show_help_dialog)
+        from wx.adv import HyperlinkCtrl, EVT_HYPERLINK
+        link = HyperlinkCtrl(self, wx.ID_ANY, label="Get help", url="")
+        link.Bind(EVT_HYPERLINK, self.show_help_dialog)
         flags = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT
         syntax_colorization_help_sizer = wx.BoxSizer(wx.VERTICAL)
         syntax_colorization_help_sizer.AddMany([
@@ -500,6 +502,9 @@ class RobotDataEditor(stc.StyledTextCtrl):
         self.SetText(text)
         self.stylizer.stylize()
         self.EmptyUndoBuffer()
+        
+    def get_text(self):
+        return self.GetText()
 
     @property
     def utf8_text(self):

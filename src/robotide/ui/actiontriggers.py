@@ -247,7 +247,8 @@ class ToolBar(object):
             button = self._get_existing_button(action)
             if not button:
                 button = self._create_button(action)
-            button.register(action)
+                button.register(action)
+            
 
 
     def _get_existing_button(self, action):
@@ -260,10 +261,12 @@ class ToolBar(object):
         self._wx_toolbar.EnableTool(id, action.is_active())
 
     def _create_button(self, action):
+        
         button = ToolBarButton(self._frame, self, action)
+        print("create button for action", button.id, action.menu_name, action.name)
         name = self._format_button_tooltip(action)
-        self._wx_toolbar.AddLabelTool(button.id, label=name, bitmap=action.icon,
-                                      shortHelp=name, longHelp=action.doc)
+        self._wx_toolbar.AddTool(toolId=button.id, label=name, bitmap=action.icon,bmpDisabled=wx.NullBitmap,
+                                      shortHelpString=name, longHelpString=action.doc)
         self._wx_toolbar.Realize()
         self._buttons.append(button)
         return button

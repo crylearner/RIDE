@@ -39,6 +39,8 @@ class TreeController(object):
 
     def register_tree_actions(self):
         actions = ActionInfoCollection(tree_actions, self, self._tree)
+        for action in actions:
+            print("register action:", action.menu_name, action.name, action.icon is None)
         self._action_registerer.register_actions(actions)
         self._action_registerer.register_action(ActionInfo(menu_name='Edit', name='Add Tag to selected', action=self.OnAddTagToSelected))
         self._action_registerer.register_action(ActionInfo(menu_name='Edit', name='Clear Selected', action=self.OnClearSelected))

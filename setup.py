@@ -60,5 +60,5 @@ setup(
     # Always install everything, since we may be switching between versions
     options={'install': {'force': True}},
     scripts=['src/bin/ride.py', 'ride_postinstall.py'],
-    install_requires=['Pygments', 'robotframework', 'configobj', 'nose']
+    install_requires=['Pygments', 'robotframework', 'configobj', 'nose', 'wxpython']
 )
