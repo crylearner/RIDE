@@ -123,7 +123,7 @@ class PybotProfile(BaseProfile):
 
     It is assumed that pybot is on the path
     '''
-    name = "pybot"
+    name = "robot"
     default_settings = {"arguments": "",
                         "include_tags": "",
                         "exclude_tags": "",
@@ -142,7 +142,7 @@ class PybotProfile(BaseProfile):
         return self.arguments.split()
 
     def get_command(self):
-        return "pybot.bat" if os.name == "nt" else "pybot"
+        return "robot.bat" if os.name == "nt" else "robot"
 
     def get_custom_args(self):
         args = []
