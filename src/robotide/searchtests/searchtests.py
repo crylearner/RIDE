@@ -92,7 +92,7 @@ class TestSearchPlugin(Plugin):
         if not current_suite:
             return []
         result = self._search(matcher, current_suite)
-        return sorted(result, cmp=lambda x, y: cmp(x[1], y[1]))
+        return sorted(result, key=lambda x:x[1])
 
     def _search(self, matcher, data):
         for test in data.tests:
