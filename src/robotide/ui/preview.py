@@ -120,8 +120,13 @@ class PreviewPanel(wx.Panel):
 
     def _remove_current_view(self):
         if self.__view:
-            self.Sizer.Remove(self.__view)
-            self.__view.Destroy()
+            try:
+                #self.Sizer.Remove(self.__view) # wxpython4.x do not support sizer.remove(window)
+                self.Sizer.detach(self.__view)
+                self.__view.Destroy()
+            except Exception as e:
+                print(e)
+                raise
 
     def _create_view(self, view_class):
         view = view_class(self)
