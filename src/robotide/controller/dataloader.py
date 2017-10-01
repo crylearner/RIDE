@@ -58,7 +58,7 @@ class _DataLoaderThread(Thread):
             self.result = self._run()
         except Exception as e:
             print("DEBUG: exception at DataLoader %s\n" % str(e))
-            pass  # TODO: Log this error somehow
+            pass
 
 
 class _DataLoader(_DataLoaderThread):
@@ -102,7 +102,8 @@ class TestDataDirectoryWithExcludes(robotapi.TestDataDirectory):
         self._settings = settings
         robotapi.TestDataDirectory.__init__(self, parent, source)
 
-    def add_child(self, path, include_suites):
+    def add_child(self, path, include_suites, extensions=None,
+                  warn_on_skipped=False): # add by yyf.  robotapi.TestDataDirectory has changed to five args
         if not self._settings.excludes.contains(path):
             self.children.append(TestData(
                 parent=self, source=path, settings=self._settings))
