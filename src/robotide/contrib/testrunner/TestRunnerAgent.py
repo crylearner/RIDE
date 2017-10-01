@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 # Modified by Mikko Korpela under NSN copyrights
 #  Copyright 2008-2015 Nokia Solutions and Networks
 #
@@ -26,13 +25,11 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
 # Ammended by Timothy Alexander <dragonfyre13@gmail.com>
 # (StreamHandler class added)
 #   Copyright 2013 Timothy Alexander
 #   Licensed under the Apache License, Version 2.0
 #      http://www.apache.org/licenses/LICENSE-2.0
-
 '''A Robot Framework listener that sends information to a socket
 
 This uses a custom streamhandler module, preferring json but sending either
@@ -40,13 +37,16 @@ json or pickle to send objects to the listening server. It should probably be
 refactored to call an XMLRPC server.
 '''
 
+import copy
 import os
-import sys
-import socket
-import threading
 import platform
-PLATFORM = platform.python_implementation()
+import socket
 import socketserver
+import sys
+import threading
+
+
+PLATFORM = platform.python_implementation()
 
 try:
     from robot.errors import ExecutionFailed
