@@ -525,7 +525,7 @@ class RobotStylizer(object):
         self.editor = editor
         self.lexer = None
         self.settings = settings
-        self.font_size = settings['Text Edit'].get('font size', 8)
+        self.font_size = settings['Text Edit'].get('font size', 10)
         if robotframeworklexer:
             self.lexer = robotframeworklexer.RobotFrameworkLexer()
             self._set_styles()

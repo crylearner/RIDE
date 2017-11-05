@@ -92,6 +92,7 @@ class _ContentAssistTextCtrlBase(object):
         else:
             self.Clear()
         self.hide()
+        event.Skip()
 
     def reset(self):
         self._popup.reset()
