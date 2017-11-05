@@ -122,7 +122,7 @@ class _RobotTableEditor(EditorPanel):
 
     def destroy(self):
         self.close()
-        self.Destroy()
+        #self.Destroy() # add by yyf, crash problem
 
     def _create_header(self, text, readonly=False):
         if readonly:
@@ -142,7 +142,7 @@ class _RobotTableEditor(EditorPanel):
             wx.EVT_COLLAPSIBLEPANE_CHANGED, self._collabsible_changed)
         settings.build(self.controller.settings, self.plugin, self._tree)
         return settings
-
+        
     def _restore_settings_open_status(self):
         if self._should_settings_be_open():
             self._settings.Expand()
