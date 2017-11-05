@@ -101,6 +101,8 @@ class _ListenerWrapper(object):
                                          'While handling %s' % (str(err),
                                                                 str(data)),
                                  exception=err, level='ERROR').publish()
+            else:
+                raise 
 
 
 """Global `Publisher` instance for subscribing to and unsubscribing from messages."""
