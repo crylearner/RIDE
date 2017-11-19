@@ -256,7 +256,7 @@ class _Section(object):
                 self._config_obj[name] = {}
             for key, _value in list(value._config_obj.items()):
                 self[name].set(key, _value, autosave, override)
-        elif name not in self._config_obj or override:
+        elif name not in self._config_obj or (override and self._config_obj[name] != value): # add by yyf. avoid some no necessary changing
             old = self._config_obj[name] if name in self._config_obj else None
             self._config_obj[name] = value
             if autosave:
