@@ -407,48 +407,52 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
         else:
         """
         _iscelleditcontrolshown = self.IsCellEditControlShown()
-
         keycode, control_down = event.GetKeyCode(), event.CmdDown()
-        event.Skip()  # DEBUG seen this skip as soon as possible
-        if keycode == ord('M') and control_down:  #  keycode == wx.WXK_CONTROL
-            self._show_cell_information()
-        elif keycode == ord('C') and control_down:
-            # print("DEBUG: captured Control-C\n")
-            self.OnCopy(event)
-        elif keycode == ord('X') and control_down:
-            self.OnCut(event)
-        elif keycode == ord('V') and control_down:
-            self.OnPaste(event)
-        elif keycode == ord('Z') and control_down:
-            self.OnUndo(event)
-        elif keycode == ord('A') and control_down:
-            self.OnSelectAll(event)
-        elif event.AltDown() and keycode in [wx.WXK_DOWN, wx.WXK_UP]:
-            self._move_rows(keycode)
-        elif event.AltDown() and keycode == wx.WXK_RETURN:
-            self._move_cursor_down(event)
-        elif keycode == wx.WXK_WINDOWS_MENU:
-            self.OnCellRightClick(event)
-        elif keycode in [wx.WXK_RETURN, wx.WXK_BACK]:
-            if not _iscelleditcontrolshown:
-                self._move_grid_cursor(event, keycode)
-            else:
-                self.save()
-        elif control_down and keycode == wx.WXK_SPACE:
-            self._open_cell_editor_with_content_assist()
-        elif control_down and not event.AltDown() and \
-                keycode in (ord('1'), ord('2')):
-            self._open_cell_editor_and_execute_variable_creator(
-                list_variable=(keycode == ord('2')))
-        elif control_down and event.ShiftDown() and keycode == ord('I'):
-            self.OnInsertCells()
-        elif control_down and event.ShiftDown() and keycode == ord('D'):
-            self.OnDeleteCells()
-        elif control_down and keycode == ord('B'):
-            self._navigate_to_matching_user_keyword(
-                self.GetGridCursorRow(), self.GetGridCursorCol())
-        # else:
-        #    event.Skip()
+        if not _iscelleditcontrolshown:
+            event.Skip()  # DEBUG seen this skip as soon as possible
+            if keycode == ord('M') and control_down:  #  keycode == wx.WXK_CONTROL
+                self._show_cell_information()
+            elif keycode == ord('C') and control_down:
+                # print("DEBUG: captured Control-C\n")
+                self.OnCopy(event)
+            elif keycode == ord('X') and control_down:
+                self.OnCut(event)
+            elif keycode == ord('V') and control_down:
+                self.OnPaste(event)
+            elif keycode == ord('Z') and control_down:
+                self.OnUndo(event)
+            elif keycode == ord('A') and control_down:
+                self.OnSelectAll(event)
+            elif event.AltDown() and keycode in [wx.WXK_DOWN, wx.WXK_UP]:
+                self._move_rows(keycode)
+            elif event.AltDown() and keycode == wx.WXK_RETURN:
+                self._move_cursor_down(event)
+            elif keycode == wx.WXK_WINDOWS_MENU:
+                self.OnCellRightClick(event)
+            elif keycode in [wx.WXK_RETURN, wx.WXK_BACK]:
+                if not _iscelleditcontrolshown:
+                    self._move_grid_cursor(event, keycode)
+                else:
+                    self.save()
+            elif control_down and keycode == wx.WXK_SPACE:
+                self._open_cell_editor_with_content_assist()
+            elif control_down and not event.AltDown() and \
+                    keycode in (ord('1'), ord('2')):
+                self._open_cell_editor_and_execute_variable_creator(
+                    list_variable=(keycode == ord('2')))
+            elif control_down and event.ShiftDown() and keycode == ord('I'):
+                self.OnInsertCells()
+            elif control_down and event.ShiftDown() and keycode == ord('D'):
+                self.OnDeleteCells()
+            elif control_down and keycode == ord('B'):
+                self._navigate_to_matching_user_keyword(
+                    self.GetGridCursorRow(), self.GetGridCursorCol())
+            elif keycode == ord('/') and event.AltDown():
+                self._open_cell_editor_with_content_assist()
+        else:
+            if keycode in [wx.WXK_RETURN, wx.WXK_BACK]:
+                    self.save()
+            event.Skip()
 
     def OnGoToDefinition(self, event):
         self._navigate_to_matching_user_keyword(
@@ -522,6 +526,7 @@ class KeywordEditor(GridEditor, RideEventHandler, metaclass=KeywordEditorMetacla
         row = self.GetGridCursorRow()
         celleditor = self.GetCellEditor(self.GetGridCursorCol(), row)
         celleditor.Show(True)
+        celleditor.StartingClick()
         wx.CallAfter(celleditor.show_content_assist)
 
     def _open_cell_editor_and_execute_variable_creator(
@@ -735,7 +740,7 @@ class ContentAssistCellEditor(grid.GridCellTextEditor):
 
     def _get_value(self):
         suggestion = self._tc.content_assist_value()
-        return suggestion or self._tc.GetValue()
+        return suggestion or self._tc.GetValue() or self._original_value
 
     def Reset(self):
         self._tc.SetValue(self._original_value)

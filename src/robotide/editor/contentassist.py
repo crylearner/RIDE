@@ -47,7 +47,7 @@ class _ContentAssistTextCtrlBase(object):
         # TODO: This might benefit from some cleanup
         keycode = event.GetKeyCode()
         # Ctrl-Space handling needed for dialogs
-        if keycode == wx.WXK_SPACE and event.ControlDown():
+        if (keycode == wx.WXK_SPACE and event.ControlDown()) or (keycode==ord('/') and event.AltDown): # add by yyf. alt + '/'
             self.show_content_assist()
             return
         if keycode in [wx.WXK_UP, wx.WXK_DOWN, wx.WXK_PAGEUP, wx.WXK_PAGEDOWN]\
@@ -85,7 +85,7 @@ class _ContentAssistTextCtrlBase(object):
     def OnFocusLost(self, event, set_value=True):
         if not self._popup.is_shown():
             return
-        value = self.gherkin_prefix + self._popup.get_value()
+        value = self.gherkin_prefix + self._popup.get_value() if self.gherkin_prefix else self._popup.get_value()
         if set_value and value:
             self.SetValue(value)
             self.SetInsertionPoint(len(self.Value))
