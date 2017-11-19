@@ -169,7 +169,7 @@ class Tree(treemixin.DragAndDrop, customtreectrl.CustomTreeCtrl,
         self._remove_datafile_node(tree)
 
     def _set_item_excluded(self, node):
-        self.SetItemTextColour(node, 'gray')
+        self.SetItemTextColour(node, wx.LIGHT_GREY) # add by yyf. no support string arg
         self.SetItemItalic(node, True)
         self.SetItemText(node, "%s (excluded)" % self.GetItemText(node))
 
@@ -186,8 +186,10 @@ class Tree(treemixin.DragAndDrop, customtreectrl.CustomTreeCtrl,
             self.SetItemTextColour(node, self._get_resource_text_color(resource_controller))
 
     def _get_resource_text_color(self, resource_controller):
-        return self.GetDefaultAttributes().colFg if resource_controller.is_used() else wx.LIGHT_GREY
-
+        # add by yyf.  self.GetDefaultAttributes().colFg will cause crash somehow when add available resource
+        #return self.GetDefaultAttributes().colFg if resource_controller.is_used() else wx.LIGHT_GREY
+        return self.GetForegroundColour() if resource_controller.is_used() else wx.LIGHT_GREY
+        
     def _testing_started(self, message):
         self._for_all_drawn_tests(self._root, lambda t: self.SetItemImage(t, ROBOT_IMAGE_INDEX))
         self._execution_results = message.results
